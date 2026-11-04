@@ -56,7 +56,8 @@ function rankingOverview(){
   ['已经出了更强的输出，换哪一格','已有葵诺丝，优先在输出位与炼对照，特别是之后要打黑渊或暗笼时。她不承担逆翎的辅助职责。缺的是单体爆发才看莉拉姆；遇到能吃持续伤害的目标，才另试莎朗。两者都不用为推普通剧情另开一队。',['葵诺丝','莉拉姆','莎朗'],[octoberReview]],
   ['新卡和觉醒，哪些现在用','十月的什炎限定在 11/4 结束；S19 次日开服，首抽不围绕他组队。旭光妮璐到手再看增伤位。普通 SR 谛听在 9 月新增觉醒，须到 80 级且全技能满，比较首周阵容时按未觉醒算。达罗斯是承伤与复活位。你这条爆发路线先用免费的凌罗稳血，把限定预算留给实际缺口。',['什炎','旭光妮璐','谛听','达罗斯','闪萝','荼蘼'],[src.octpatch,src.awake,src.dar,src.nicole]]
  ];
- const cards=sections.map(([title,body,names,refs],i)=>'<details class="rank-author" data-author="'+i+'" '+(i===(Number(state.rankAuthor)||0)?'open':'')+'><summary>'+String(i+1).padStart(2,'0')+' · '+title+'</summary><div class="rank-author-body"><p>'+body+'</p>'+personFaces(names,title)+roleRefs(refs)+'</div></details>').join('');
+ const opened=Array.isArray(state.rankOpen)?state.rankOpen:[Number(state.rankAuthor)||0];
+ const cards=sections.map(([title,body,names,refs],i)=>'<details class="rank-author" data-author="'+i+'" '+(opened.includes(i)?'open':'')+'><summary>'+String(i+1).padStart(2,'0')+' · '+title+'</summary><div class="rank-author-body"><p>'+body+'</p>'+personFaces(names,title)+roleRefs(refs)+'</div></details>').join('');
  return '<p class="lead">国服 S19 · 11 月 4 日开服前校订。顺序按你作为零氪 PvE 新人的资源安排；角色页区分当期实测、技能说明和暂缓投资。</p><div class="related"><b>第一支队怎么站？</b><a href="#roster/scene/0">看 10 月新号的开局四人和换人顺序 →</a><a href="#roster/scene/7">后期 · 黑渊拿鹤五人队 →</a><a href="#roster/scene/9">觉醒谛听 · 双人速刷与替代 →</a></div><div class="rank-studies roster-ranks">'+cards+'</div>';
 }
 function libraryPicker(kind,items,idx){
@@ -64,11 +65,12 @@ function libraryPicker(kind,items,idx){
  return '<label class="note" for="roster-pick">'+label+' · 共 '+items.length+' 项</label><select class="choice" id="roster-pick" data-kind="'+kind+'">'+items.map((item,i)=>'<option value="'+i+'" '+(idx===i?'selected':'')+'>'+encodeText(item.name)+'</option>').join('')+'</select>';
 }
 function roleLibrary(section,topic){
- const kind=['scene','person','rank'].includes(section)?section:'rank';
- const modes=[['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
+ const kind=['mine','scene','person','rank'].includes(section)?section:'mine';
+ const modes=[['mine','我的角色配队'],['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
  const links='<div class="libnav" aria-label="角色攻略">'+modes.map(([id,t])=>'<a href="#roster/'+id+'" '+(id===kind?'aria-current="page"':'')+'>'+t+'</a>').join('')+'</div>';
  let body='';
- if(kind==='rank')body=rankingOverview();
+ if(kind==='mine')body=ownedPlanner(topic);
+ else if(kind==='rank')body=rankingOverview();
  else{
   const scenes=allScenes(),items=kind==='scene'?scenes:rosterPeople();
   const index=Number(topic),idx=Number.isInteger(index)&&index>=0&&index<items.length?index:0,item=items[idx],e=encodeText;
@@ -76,7 +78,7 @@ function roleLibrary(section,topic){
   if(kind==='scene'){
    const picture=artEntry('maps',item.mapKey||legacyMapKeys[idx]);
    body+=panel('roster-scene','国服 PvE / 场景核对',e(item.name),
-    '<p class="lead">'+e(item.goal)+'</p><p class="stripe">'+e(item.teamLabel||'尚缺近期同场景完整队伍')+'</p>'+
+    '<p class="lead">'+e(item.goal)+'</p>'+jump('roster/mine/'+idx,'用我的角色配这关')+'<p class="stripe">'+e(item.teamLabel||'尚缺近期同场景完整队伍')+'</p>'+
     personFaces(item.verifiedTeam||[],'原文点名队员')+
     (picture?makePlates([picture],'maps scene-photo'):'')+
     '<details class="scene-plan" open><summary>本场怎么打</summary>'+step([['已核实的配置',e(item.team)],['出手与技能',e(item.rotation)]])+'</details>'+
@@ -100,7 +102,7 @@ document.addEventListener('change',e=>{if(e.target.id==='roster-pick')location.h
 
 document.addEventListener('toggle',event=>{
  const card=event.target;
- if(!card.matches?.('.rank-author[open]')||!card.isConnected)return;
- state.rankAuthor=Number(card.dataset.author);save();
- for(const other of document.querySelectorAll('.rank-author[open]'))if(other!==card)other.open=false;
+ if(!card.matches?.('details.rank-author')||!card.isConnected)return;
+ state.rankOpen=Array.from(document.querySelectorAll('.rank-author[open]'),el=>Number(el.dataset.author));
+ save();
 },true);

@@ -70,14 +70,14 @@ const sub=(arr,n)=>'<div class="sub" aria-label="内容筛选">'+arr.map((x,i)=>
 const jump=(key,t)=>'<a class="jump" href="#'+key+'">'+t+' →</a>';
 function route(n){const s=stages[n],checks=s.tasks.map((t,i)=>'<label><input type="checkbox" data-task="'+n+'-'+i+'" '+(state['t'+n+'-'+i]?'checked':'')+'><span>'+t+'</span></label>').join('');
  return head('进度路线','01 / PROGRESSION')+sub(stages.map(s=>s.name),n)+grid(panel('',s.code+'　/　'+s.date,s.title,'<p class="lead">'+s.intro+'</p>'+step(s.steps)+ref(s.refs)),panel('tint','CHECKLIST / 本阶段','我今天要做什么','<div aria-live="polite" class="note" id="done"></div><div class="progress" aria-hidden="true"><i id="bar"></i></div><div class="checks">'+checks+'</div><p class="stripe">'+s.next+'</p>'+jump(n>=3?'fight':'draw',n>=3?'查看副本解法':'看抽取优先级')))}
-const branches=[
- ['还没有逆翎、夜离','默认把限定预算留给逆翎首只。炼先清波，克洛斯负责前期削弱，14 日任务再补瑞玛丽。距离保底太远就先推图攒票。'],
- ['已有逆翎','停止该池。先让逆翎给炼或瑞玛丽铺增伤。若免费群攻已能清图，保留本池可用的票；仍想用夜离且能独立覆盖保底时才追首只。'],
- ['已有夜离，没有逆翎','夜离直接当主攻，克洛斯站她前面。下一笔限定预算看逆翎；没到保底前先用免费阵容，不再为第二个群攻花票。'],
- ['已有逆翎和夜离','这两池都停手。缺轮转看梨梨，缺治疗领凌罗，缺免疫/驱散先找低稀有对策手。把钻留给下次真正缺的功能。'],
- ['只想休闲，不想为 UP 花钻','限定先全留。炼、克洛斯、凌罗加已有对策位即可推；用 14 日任务扩充角色。只在有清晰缺口且有对应免费券／自选时行动。']
-];
-function draw(n){const p=pools[n];return head('抽卡决策','02 / SUMMON')+sub(pools.map(x=>x[0]),n)+grid(panel('',p[0]+'　/　路线建议',p[1],'<p>'+p[2]+'</p><p class="stripe">'+p[3]+'</p>'+ref(p[4].split(' '))+'<details><summary>下池前核对三件事</summary><p>① 正在用的是哪种票？② 这页写的是几抽内必得哪名角色、当前还差多少？③ 倒计时前能否攒齐？查看本池页面说明的继承范围，不把达罗斯池的 80 抽套到新区两个 UP。</p></details>'),panel('tint','MY ROSTER / 按持有调整','下一笔限定预算给谁？','<label for="owned" class="note">选择你的实际情况</label><select id="owned" class="choice">'+branches.map((x,i)=>'<option value="'+i+'" '+(Number(state.branch||0)===i?'selected':'')+'>'+x[0]+'</option>').join('')+'</select><p id="advice" aria-live="polite"></p><details style="margin-top:15px"><summary>算一笔保底预算</summary><p>例：池面还差 60 抽，你有可用于此池的 18 张本池可用的票，缺 42 抽；再按本池兑换价计算晶钻缺口。只计算同池可用票，到账前的奖励不计入。</p>'+ref(['s19'])+'</details>'))}
+function draw(n){
+ const pool=pools[n],owned=selectedHeroes();
+ const summary=panel('tint box-pulls','我的抽卡计划','当前持有 · '+boxCount(owned),
+  jump('roster/mine','编辑我的角色')+'<div class="box-pull-content">'+ownedPullContents(owned)+'</div>');
+ const reference=panel('','当前池说明 · '+pool[0],['减益辅助位','新手定向的候选','先确认是否实际发放','群攻输出位','承伤与复活位','常驻券与活动'][n],
+  '<p>'+pool[2]+'</p><p>'+pool[3]+'</p>'+ref(pool[4].split(' ')));
+ return head('抽卡决策','02 / SUMMON')+sub(pools.map(x=>x[0]),n)+grid(summary,reference);
+}
 const roleCats=['免费骨架','抽到再练','低星对策'];
 function roster(n){
  const groups=[
@@ -96,7 +96,7 @@ function fight(n){
  const [label,index]=fightRoutes[n],scene=allScenes()[index];
  return head('副本打法','04 / BOSS LAB')+sub(fightRoutes.map(([title])=>title),n)+grid(
   panel('',label,encodeText(scene.name),'<p class="lead">'+encodeText(scene.goal)+'</p><p class="stripe">'+encodeText(scene.teamLabel)+'</p>'+
-   step([['配置',encodeText(scene.team)],['实际打法',encodeText(scene.rotation)]])+jump('roster/scene/'+index,'看完整场景、换人和出处')+(n===5?jump('roster/scene/5','另看莎朗'):'')+roleRefs(scene.sources)),
+   step([['配置',encodeText(scene.team)],['实际打法',encodeText(scene.rotation)]])+jump('roster/mine/'+index,'按我已有的角色配这关')+jump('roster/scene/'+index,'看完整场景、换人和出处')+(n===5?jump('roster/scene/5','另看莎朗'):'')+roleRefs(scene.sources)),
   panel('tint','体力去向','按材料缺口刷',
    step([['秘闻调查 · 经验','先检查背包。只养一队时角色经验可能有余，缺多少再刷多少。'],['源点前哨 · 潜能','主力被潜能卡住时刷对应材料。'],['熔断禁区 · 源器','先拿能用的主词条，再提高层数。'],['凶影追缉 · 智壳','先完成任务，需要具体智壳再刷。新区三项双倍没有这一项。']])+ref(['s19','run'])));
 }
@@ -118,12 +118,11 @@ function render(){
  else if(key==='manual'){app.innerHTML=fieldManual(part,topic)}
  else{app.innerHTML=[dayOne,null,route,draw,roster,fight,cal,evidence,atlasView][idx](n,topic);const link=fieldRelated(key,n);if(link)app.querySelector('.sectionhead')?.insertAdjacentHTML('afterend',link)}
  app.dataset.key=key;if(key!=='roster'||['0','1','2'].includes(part))illustratePage(key,n,part,topic);refreshProgress();
- if(key==='draw')document.getElementById('advice').textContent=branches[Number(state.branch)||0][1];
  flowAfterRender(key);
  document.title=tabs[idx][1]+' · 伊瑟 S19 开荒手册';
 }
 app.addEventListener('click',e=>{const el=e.target.closest('[data-sub]');if(el)location.hash=app.dataset.key+'/'+el.dataset.sub});
-app.addEventListener('change',e=>{if(e.target.matches('[data-task]')){state['t'+e.target.dataset.task]=e.target.checked;save();refreshProgress()}if(e.target.id==='owned'){state.branch=Number(e.target.value);save();document.getElementById('advice').textContent=branches[state.branch][1]}});
+app.addEventListener('change',e=>{if(e.target.matches('[data-task]')){state['t'+e.target.dataset.task]=e.target.checked;save();refreshProgress()}});
 // Save the reading position before leaving a view. Browser Back can then restore it.
 function saveScroll(){history.replaceState({...history.state,guideY:scrollY},'')}
 document.addEventListener('click',e=>{if(e.target.closest('a[href^="#"],[data-sub]'))saveScroll()},true);
