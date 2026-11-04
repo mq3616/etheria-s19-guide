@@ -2,7 +2,7 @@
 
 [打开在线手册](https://mq3616.github.io/etheria-s19-guide/) · [首日清单](https://mq3616.github.io/etheria-s19-guide/#day1/0) · [角色与配队](https://mq3616.github.io/etheria-s19-guide/#roster/rank)
 
-面向简体中文服 S19「忘忧梦火」的新玩家。按天切换首周清单，查看抽取与资源优先级、角色图鉴、副本打法及出处。活动安排以游戏内公告为准。
+面向简体中文服 S19「忘忧梦火」的新玩家。按天切换首周清单，查看抽取与资源优先级、角色图鉴、副本打法及出处。本版按 2026 年 11 月 4 日国服公告、9–10 月作者实录核对。场景页区分完整通关队、已知位置与未验证替换，列出原片时间点。活动以游戏内公告为准。
 
 纯静态 HTML、CSS 和 JavaScript，无需安装依赖。在仓库根目录运行 `python3 -m http.server 8000` 后，访问 `http://localhost:8000/`。GitHub Pages 从 main 分支根目录发布。
 

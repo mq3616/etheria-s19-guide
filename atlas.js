@@ -1,5 +1,5 @@
 'use strict';
-Object.assign(window.peopleArt,window.reinforceArt,window.squadArt);
+Object.assign(window.peopleArt,window.reinforceArt,window.squadArt,window.currentArt);
 const atlasMapNames={hub:'挑战入口',forge:'熔断禁区选关',binghuo:'重构兵祸',duoqi:'多琪',aoluola:'奥洛拉',nana:'妮可娜娜',heyan:'赫妍',shalang:'莎朗',growth:'超链之证',sourceweb:'源网征令'};
 const atlasRole={炼:'清波主攻',克洛斯:'破防铺垫',凌罗:'治疗续航',逆翎:'驱散与增伤',梨梨:'拉条与轮转',夜离:'追击爆发',瑞玛丽:'生命型群攻',宁芙涅:'护盾与免疫',芙蕾雅:'节奏辅助',莉拉姆:'单体输出',谛听:'单体输出'};
 function artSet(group){return group==='people'?window.peopleArt:group==='explore'?window.exploreArt:window.mapArt}
@@ -29,8 +29,8 @@ function illustratePage(key,n,part,topic){
  if(key==='route'){if(n===0)explore();else if(n===1)p(['炼','克洛斯','凌罗']);else if(n===2)m('hub');else if(n===3)p(['瑞玛丽','宁芙涅']);else m('forge');return}
  if(key!=='manual')return;
  const section=Object.hasOwn({growth:1,hero:1,boss:1,compare:1},part)?part:'compare', i=Number(topic)||0;
- if(section==='boss'){m(['nana','binghuo','duoqi','aoluola','heyan','shalang'][i]);return}
- if(section==='hero'){p([['炼','克洛斯','凌罗'],['逆翎','夜离'],['梨梨','芙蕾雅','莉拉姆'],['炼','克洛斯'],['梨梨'],['凌罗'],['瑞玛丽','宁芙涅'],['谛听','恶命'],['逆翎'],['夜离']][i]||[]);return}
+ if(section==='boss'){m(['nana','binghuo','duoqi','aoluola','heyan','shalang','','awakeDiting'][i]);return}
+ if(section==='hero'){p([['炼','克洛斯','凌罗'],['达罗斯','葵诺丝','什炎'],['克洛斯','炼'],['艾莉尔','瑞玛丽'],['谛听'],['旭光妮璐'],['什炎','旭光妮璐']][i]||[]);return}
  if(section==='growth'){if(i===0)explore();else if(i===1)m('hub','growth');else if(i===3)m('forge');else if(i===4)m('binghuo');return}
  if(i===0)p(['逆翎','夜离']);else if(i===1)m('binghuo','duoqi','aoluola');else if(i===2)p(['炼','克洛斯','凌罗']);else if(i===3)m('forge');else if(i===5)explore();else if(i===6)p(['瑞玛丽'])
 }

@@ -34,7 +34,7 @@ const atlasRoutes={
 function activeArtLink(im){
  let href='',label='';
  if(im.group==='people'){href=personRoute(im.key);label='看'+im.title+'的角色资料'}
- if(im.group==='maps'){href=atlasRoutes[im.key];label=href?.startsWith('roster/')?'看这个副本的阵容与打法':'看相关开荒步骤'}
+ if(im.group==='maps'){const scene=allScenes().findIndex(s=>s.mapKey===im.key);href=scene>=0?'roster/scene/'+scene:atlasRoutes[im.key];label=href?.startsWith('roster/')?'看这个副本的阵容与打法':'看相关开荒步骤'}
  const a=document.querySelector('.art-guide-link');a.hidden=!href;
  if(href){a.href='#'+href;a.textContent=label+' →'}
 }
@@ -49,7 +49,7 @@ function contextualChecklist(day,n){
  const topics=day===1?[
   ['认起步队','roster/scene/0'],['对照卡池','draw/0'],['看体力副本入口','atlas/2'],['看首周活动','calendar']
  ][n]:[
-  ['看起步队与替补','roster/scene/0'],['看克洛斯怎么配','roster/person/1'],['看兵祸阵容','roster/scene/2'],['看单体输出谛听','roster/person/6'],['核对限定预算','draw/0'],['对照首周活动','calendar']
+  ['看起步队与替补','roster/scene/0'],['看克洛斯怎么配','roster/person/1'],['看兵祸已验证的位置','roster/scene/2'],['看单体输出谛听','roster/person/6'],['核对限定预算','draw/0'],['对照首周活动','calendar']
  ][day-2];
  return '<a class="task-reference" href="#'+topics[1]+'">'+topics[0]+' ↗</a>';
 }
@@ -57,8 +57,8 @@ function searchGuide(query){
  const q=query.trim().toLowerCase();
  const row=(title,type,route,words='')=>({title,type,route,words});
  const days=[row('第 1 天 · 进服与首抽','清单','day1','首日抽卡资源'),...weekDays.map(d=>row('第 '+d.day+' 天 · '+d.title,'清单','week/'+d.day,d.focus))];
- const people=rosterPeople().map((p,i)=>row(p.name,'角色','roster/person/'+i,p.role||''));
- const scenes=[starterScene,...sceneRanks].map((s,i)=>row(s.name,'阵容','roster/scene/'+i,s.goal));
+ const people=rosterPeople().map((p,i)=>row(p.name,'角色','roster/person/'+i,[p.role,p.alias].filter(Boolean).join(' ')));
+ const scenes=allScenes().map((s,i)=>row(s.name,'阵容','roster/scene/'+i,s.goal));
  const notes=guideGroups.flatMap(([kind,label,get])=>get().map((v,i)=>row(v.title,label,'manual/'+kind+'/'+i)));
  const poolsList=pools.map((p,i)=>row(p[0],'卡池','draw/'+i,p[1]));
  const catalogs=tabs.map(([k,title])=>row(title,'栏目',k));

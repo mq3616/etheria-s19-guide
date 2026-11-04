@@ -19,27 +19,27 @@ window.mapArt = {
   },
   binghuo: {
     src: 'art/maps/binghuo.webp',
-    credit: '飞鸥不下灬 · B站《标准国家队源器炼狱本全挂机演绎》P1 · 2025-10-21 · 01:20 截帧',
-    url: 'https://www.bilibili.com/video/BV1G1WSzuEu8/?p=1&t=80',
-    caption: '重构兵祸炼狱战斗实例。画面中左侧部件已被击破，本体与另一侧部件仍在场，便于对照攻击顺序。2025 历史作业。'
+    credit: 'x佛系摸鱼 · TapTap · 2026/10/17 修订 · 新人入坑开荒攻略',
+    url: 'https://www.taptap.cn/moment/860227779365438892',
+    caption: '重构兵祸的选关与配队示意。上、下为不同界面，下图是作者推荐位，没有展示该队的胜利结算。可辨认的建议位有谛听、缬草。'
   },
   duoqi: {
     src: 'art/maps/duoqi.webp',
-    credit: '飞鸥不下灬 · B站《标准国家队源器炼狱本全挂机演绎》P2 · 2025-10-21 · 00:15 截帧',
-    url: 'https://www.bilibili.com/video/BV1G1WSzuEu8/?p=2&t=15',
-    caption: '多琪炼狱的五人战斗场景，后排悬浮本体与前排小怪同场。对照控制覆盖及输出行动顺序使用。2025 历史作业。'
+    credit: 'x佛系摸鱼 · TapTap · 2026/10/17 修订 · 新人入坑开荒攻略',
+    url: 'https://www.taptap.cn/moment/860227779365438892',
+    caption: '多琪的选关与配队示意。上、下为不同界面，下图是作者推荐位，没有展示该队的胜利结算。可辨认的建议位有蝰蛇、戍守卡奇。'
   },
   aoluola: {
     src: 'art/maps/aoluola.webp',
-    credit: 'yys靠脸混饭 · B站《伊瑟国服开荒攻略04》· 2025-10-08 · 05:00 截帧',
-    url: 'https://www.bilibili.com/video/BV1QvxYzZEJK/?t=300',
-    caption: '奥洛拉炼狱 Boss 正面与治疗队伍实例。观察诅咒之盾出现后，治疗是否赶在主 C 之前完成。2025 历史作业。'
+    credit: 'x佛系摸鱼 · TapTap · 2026/10/17 修订 · 新人入坑开荒攻略',
+    url: 'https://www.taptap.cn/moment/860227779365438892',
+    caption: '奥洛拉的选关与配队示意。上、下为不同界面，下图是作者推荐位，没有展示该队的胜利结算。可辨认的建议位有梨梨、逆翎和谛听。'
   },
   nana: {
     src: 'art/maps/nana.webp',
     credit: 'b站新阳 · B站《尼可娜娜炼狱智壳副本低配自动攻略》· 2025-10-03 · 02:15 截帧',
     url: 'https://www.bilibili.com/video/BV1N6HLzoE2q/?t=135',
-    caption: '妮可娜娜炼狱智壳副本的实际 Boss 与两侧小怪。原视频提供无夜离、无逆翎、无莉拉姆的低配思路。2025 历史作业。'
+    caption: '旧版战斗截图，仅供辨认本体和部件。当前打法见场景页。'
   },
   sourceweb: {
     src: 'art/maps/sourceweb.webp',
@@ -51,7 +51,7 @@ window.mapArt = {
     src: 'art/maps/heyan.webp',
     credit: '种子言 · B站《低成本通关炼狱赫妍》· 2025-10-07 · 01:05 截帧',
     url: 'https://www.bilibili.com/video/BV1jzxRzvEZ6/?t=65',
-    caption: '赫妍炼狱 Boss 与两侧小怪的真实战斗位置。原片用 R 卡奇铺控制、莉拉姆集中输出。2025 历史作业。'
+    caption: '旧版战斗截图，仅供辨认本体和部件。当前打法见场景页。'
   }
 };
 
@@ -59,5 +59,5 @@ window.mapArt.shalang = {
   src:'art/maps/shalang.webp',title:'莎朗 · 智壳首领',
   credit:'一路疾行 · B站 · 2025-10-08 · 01:43 战斗画面',
   url:'https://www.bilibili.com/video/BV1pqxfzpEJf/?t=103',
-  caption:'炼狱莎朗本体与两侧小怪的位置。点「看这个副本的阵容与打法」可查看控小怪和集火本体的顺序。'
+  caption:'旧版战斗截图，仅供辨认本体和部件。当前打法见场景页。'
 };
