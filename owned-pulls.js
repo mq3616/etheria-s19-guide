@@ -1,101 +1,47 @@
-/* Mainland CN S19 preparation, checked 2026-11-04.
- * budget is the page's coverage status for the NEWCOMER TARGET ONLY.
- * It is not a cash balance, a guarantee of obtaining a hero, or a Daros budget.
- * Empty ownership means "not entered", never "owns no characters".
- */
+/* 国服 S19，2026-11-04。目标、获取渠道和实际是否该花票分别判断。 */
 (function (root) {
   'use strict';
-  var official = ['伊瑟官方｜S19角色赠送、新人夜离/逆翎UP、芙蕾雅定向', 'https://www.taptap.cn/moment/866719390408642161?group_id=333480'];
-  var practical = ['LilyQAQ｜10/28国服新号1—80级实战', 'https://www.taptap.cn/moment/864509086933189597?group_id=333480'];
-  var currentPool = ['伊瑟官方｜达罗斯11/4—12/2独立极相卡池规则', 'https://www.taptap.cn/moment/865337798482199546?group_id=333480'];
-  var names = {
-    '逆鳞': '逆翎', '逆龄': '逆翎', '叶离': '夜离', '夜璃': '夜离',
-    '绫罗': '凌罗', '利拉姆': '莉拉姆', '里拉姆': '莉拉姆',
-    '瑞马丽': '瑞玛丽', '荼靡': '荼蘼'
-  };
-  var outputNames = ['炼', '瑞玛丽', '莉拉姆', '谛听', '葵诺丝', '玄骊', '莎朗', '什炎', '闪萝', '伯诺瓦'];
-  var supportNames = ['克洛斯', '梨梨', '凌罗', '艾莉尔', '水生绫', '拂秋', '芙蕾雅'];
-  function ownedPullPlan(ownedSet, budget) {
-    var owned = new Set();
-    if (ownedSet && typeof ownedSet !== 'string' && typeof ownedSet[Symbol.iterator] === 'function') {
-      Array.from(ownedSet).forEach(function (name) {
-        if (typeof name === 'string' && name.trim()) {
-          var cleaned = name.trim();
-          owned.add(names[cleaned] || cleaned);
-        }
-      });
+  const official = ['S19 公告 · 固定赠送与新人召唤', 'https://www.taptap.cn/moment/866719390408642161?group_id=333480'];
+  const run = ['LilyQAQ · 10/28 新号实录', 'https://www.taptap.cn/moment/864509086933189597?group_id=333480'];
+  const review = ['璟璃 · 10/28 角色培养评价', 'https://www.taptap.cn/moment/814947599944516602?group_id=333480'];
+  const video = ['千里漫漫 · 10/02 黑渊拿鹤结算与面板', 'https://www.bilibili.com/video/BV1hjaU6BE5c/?t=187'];
+  const oldPool = ['官方 · 葵诺丝上一轮限时召唤日期', 'https://www.taptap.cn/moment/851171629613450759?group_id=333480'];
+  function ownedPullPlan(owned, budget, goal = 'start') {
+    const has = name => owned.has(name);
+    const later = has('梨梨') ? (has('莉拉姆')?'梨梨、莉拉姆都已到手。让梨梨先拉主攻，首领关换莉拉姆收尾，暂存自选机会。':'梨梨已经能拉主攻。以后若首领超时，先试单体打手，再考虑莉拉姆。') : '下一位优先留意梨梨。主攻能打出高伤时，她能拉主攻再动、缩短技能冷却。等能选到她的自选箱或定向池。';
+    function decision(title, action, next, basis, sources) {
+      return {title, action, next, basis, sources, budgetTarget:''};
     }
-    var status = ['unknown', 'covered', 'short'].indexOf(budget) >= 0 ? budget : 'unknown';
-    var hasPlume = owned.has('逆翎');
-    var hasYeli = owned.has('夜离');
-    var outputs = outputNames.filter(function (name) { return owned.has(name); });
-    var supports = supportNames.filter(function (name) { return owned.has(name); });
-    var result = {
-      title: '', action: '', stop: '', reason: '', alternatives: [],
-      sources: [official, practical],
-      target: null,
-      budgetTarget: '',
-      budgetStatus: status,
-      evidence: '只采用当前新服公告与近期普通号实战；已有角色用于识别重复投入，不由角色名推算练度或保证替代。',
-      poolCheck: 'S19公告确认新人夜离、逆翎UP，但未公开两池完整票种、保底计数与截止日。实际出手前须核对本服池详情；页面预算状态不能代替卡池确认。'
-    };
-    if (!owned.size) {
-      result.title = '先录入已有角色';
-      result.action = '尚未录入卡盒，暂不生成抽取目标。先勾选实际已获得的角色，再看新人池与免费任务奖励。';
-      result.stop = '未录入不代表零角色；此时不建议投入晶钻或打开自选。';
-      result.reason = 'S19有免费培养与任务角色，空记录无法判断输出、辅助或重复风险。';
-      result.alternatives = ['克洛斯、凌罗来自培养计划；瑞玛丽、宁芙涅来自14日系列任务，分别记录已领取与尚未领取。', '目标保底是否覆盖也先保留未知，不能将常驻票或其它卡池预算混算。'];
-      result.caseId = 'unrecorded';
-      return result;
+    function banner(name, reason) {
+      const advice = budget === 'covered' ? '已确认本池保底够，抽到第一只就停。' : budget === 'short' ? '本池保底不够，这轮先存票。' : '先看池面「距必得目标」还差多少抽。票和准备投入的晶钻能覆盖，再抽首只。';
+      const firstMove=name==='逆翎'?(has('夜离')?'逆翎铺减益，让已有的夜离收尾。':'用逆翎先铺减益、炼收尾。'):'想等免费瑞玛丽就先存；若要夜离立即清波，再看她自己的保底。';
+      const next = name==='夜离'&&!has('逆翎') ? '夜离到手先当主攻，克洛斯从培养计划领来破防。之后再评估逆翎的驱散、增伤是否用得上。' : later;
+      return {...decision((budget==='short'?'先存票，目标留给':'新人 UP 优先')+name,firstMove+advice,next,reason,[official,run,video,review]),budgetTarget:name};
     }
-    if (hasPlume && hasYeli) {
-      result.title = '夜离、逆翎都有：新人双池停手';
-      result.action = '两名新人UP角色已各有本体，先停止为补角色而抽这两池，资源留给现有队伍养成。';
-      result.stop = '本页不安排重复本体、补原质或因为预算覆盖而继续抽。';
-      result.reason = '当前新人双池的本体缺口已经补齐；近期普通号实战也没有要求同时追重复本体才能推进。';
-      result.alternatives = ['用现有角色按任务推进；任务瑞玛丽到账后先看实际关卡用途，不因免费到手就同时追加另一套主C投入。', '达罗斯属于另一张当期卡池；本页新人目标预算不用于判断其保底。当前未核到普通号PVE替换实测，不据新卡定位另开抽取目标。'];
-      result.sources.push(currentPool);
-      result.caseId = 'both';
-    } else if (hasPlume) {
-      result.title = '已有逆翎：不再补同一功能本体';
-      result.action = outputs.length ? '已有逆翎，并已录入输出：' + outputs.join('、') + '。先验证现队能否推进，不把夜离设为自动追加目标。' : '逆翎本体已齐。先用任务输出推进，并录入实际可用主C；不能仅因没勾夜离就认定缺输出。';
-      result.stop = '新人逆翎池停在已有本体；没有具体关卡的输出缺口前，不动用留存预算追夜离。';
-      result.reason = 'LilyQAQ的近期新号以免费御三家加逆翎推进到80级，证明存在不依赖夜离的普通号路线；不代表所有已录角色都已成型。';
-      result.alternatives = ['S19任务还提供瑞玛丽；先确认领取进度、现有输出练度与实际卡关原因。', '若之后确定喜欢夜离或确有对应需求，再单独核对夜离池与其预算；当前“新人目标已覆盖”不能直接视为夜离也覆盖。'];
-      result.caseId = outputs.length ? 'plume-with-output' : 'plume-output-not-recorded';
-    } else if (owned.has('克洛斯') && (hasYeli || outputs.length)) {
-      result.title = hasYeli ? '夜离与克洛斯已有：先不追加新人池' : '输出与破防已有：先验证现队';
-      result.action = '已录入输出：' + (hasYeli ? ['夜离'].concat(outputs) : outputs).join('、') + '，以及克洛斯。先用现队推进；当前没有具体功能缺口记录，不启动新的追保底目标。';
-      result.stop = '新人双池先停；不因为预算覆盖就补另一个本体，也不把已有克洛斯直接判为必须淘汰。';
-      result.reason = '近期普通号用免费输出和克洛斯继续推进；S19还将提供培养与任务角色。这里没有证据证明已录入队伍现在必须更换破防位，角色强度评价不能代替本关实测。';
-      result.alternatives = ['确认治疗位、角色练度和当前卡点；若以后确有逆翎对应的功能缺口，再单独建立新人逆翎预算。', '已有的其他核心保留使用；当前没有同练度实测证明夜离或逆翎对所有同职能角色构成无条件升级。'];
-      result.caseId = hasYeli ? 'yeli-with-kloss' : 'other-core-with-kloss';
-    } else {
-      result.target = '逆翎';
-      result.budgetTarget = '逆翎';
-      var withKloss = owned.has('克洛斯');
-      var withCore = outputs.length > 0;
-      result.caseId = hasYeli ? 'yeli-only' : withCore ? 'other-output' : supports.length ? 'support-box' : 'other-box';
-      result.title = hasYeli ? '仅有夜离：先保已有输出投入' : withCore ? '已有其它输出：先不重复补夜离' : '尚未录入新人双UP：先用免费队核对缺口';
-      var existing = hasYeli ? '夜离本体已经有了，先停止补夜离重复；' : withCore ? '已录入输出：' + outputs.join('、') + '；角色名不代表练度已够，先不追加另一个输出池。' : '没有勾选双UP不代表必须同时补两人；';
-      var functionState = withKloss ? '你已拥有克洛斯，近期普通号用她继续推图，逆翎不是开局通行证。' : 'S19培养计划提供克洛斯和凌罗，可先完成免费队的输出、破防和续航。';
-      result.reason = existing + functionState + '近期实战作者在御三家基础上补过逆翎，因此这里只保留逆翎作为待核验的新人功能目标，不据此宣称它在所有场景都优于已有辅助。';
-      if (status === 'covered') {
-        result.action = '页面记录新人目标保底已覆盖。先核实本服新人逆翎池确实指向逆翎、票种/计数/期限无误；若现队正在推进，可继续保留预算。确有功能缺口、并确认要补本体时，再执行这个单一目标。';
-        result.stop = '目标本体到手即停；不要顺带追夜离、重复本体或把余票当作必须花完的额度。';
-      } else if (status === 'short') {
-        result.action = '页面记录新人目标保底未覆盖：先不追逆翎池，继续用现有角色及免费培养计划推进，保留专用票。';
-        result.stop = '不为了补齐纸面阵容硬追缺口，不把达罗斯池或常驻票库存视作新人逆翎保底。';
-      } else {
-        result.action = '新人目标保底仍未知：先核对本服池目标、票种、当前计数、可用专用票与截止时间；确认之前保留晶钻。';
-        result.stop = '未算清缺口时不以“先抽几次试试”启动追保底；确认后再选择覆盖或未覆盖。';
+    if (goal==='boss') {
+      if (has('莉拉姆')||has('谛听')) {
+        const hitter=has('莉拉姆')?'莉拉姆':'谛听';
+        return decision('先用已有的'+hitter+'打首领','先让破防位动，再让'+hitter+'用单体技能收尾。先试一次，再花自选机会。',later,'10 月评价支持莉拉姆打首领，现有资料缺 S19 新号同装备换人对照。',[review,run]);
       }
-      result.alternatives = [functionState,
-        supports.length ? '已录入辅助：' + supports.join('、') + '。这些角色先检查养成与本关机制；本轮没有同练度实测证明新人逆翎能无条件替换其中所有角色。' : '已有辅助尚未完整录入；补全卡盒后再判断功能重复，先不要用缺记录代替缺角色。',
-        hasYeli || withCore ? '已有输出先用起来；免费瑞玛丽领取后再验证用途，不自动同时养多个主C。' : '按近期普通号作者的免费御三家路线推进；这条路线不要求先凑齐夜离与逆翎。'];
+      return decision('单体输出优先看莉拉姆','能选莉拉姆的箱子到手后，再把名额给她。未见可指定她的入口时，晶钻先留着。','拿到后先试首领。单次伤害够、第二轮大招接不上，再补梨梨。','来自 10 月角色评价。没有本服次日送光暗箱的官方承诺，也没有她替换你的主攻后能快几回合的实测。',[review,official]);
     }
-    return result;
+    if (goal==='turns') {
+      return has('梨梨') ? decision('用已有的梨梨，省下这次自选','把梨梨调到主攻前，优先拉主攻接第二轮技能。','已能顺利轮转时，存票等下一个明确卡点。','拿鹤实战里梨梨先于两名输出，成型号速度只作参考。',[video,review]) :
+        decision('下一位优先拿梨梨','能指定梨梨时优先拿首只。S19 尚未确认这样的自选箱或定向池，今天先存晶钻。','在能拿到她以前，先用教程的幻音千明拉条加攻。','10 月黑渊拿鹤的 5928 分队用了梨梨。配合 10 月培养评价，适合想让主攻多动的账号。',[video,review,official]);
+    }
+    if (goal==='future') {
+      return decision(has('葵诺丝')?'先养已有的葵诺丝':'留票关注葵诺丝',has('葵诺丝')?'让她做生命型输出，保留抽重复本体的资源。':'上一轮 UP 在 10 月 14 日结束。等官方公布可指定她的新池，再按当期表现决定。','现在先领任务瑞玛丽练群伤。后面有明确复刻日期，再给那个池单独算保底。','璟璃的 10 月培养评价把她与逆翎并列。缺两人同练度、同副本的替换实测。',[review,oldPool,official]);
+    }
+    if (goal==='waves') {
+      if (has('夜离')||has('瑞玛丽')||has('葵诺丝')||has('闪萝')) {
+        const hitter=['夜离','瑞玛丽','葵诺丝','闪萝'].find(has);
+        return decision('先用已有的'+hitter+'清波','把一套合适的输出装先集中给她，新人夜离池暂时停手。',later,'新号能靠炼过渡到任务瑞玛丽。已有群攻时，没有同配置实战支持再花一份限定保底。',[run,official]);
+      }
+      return banner('夜离','仅在你希望现在补群攻时选这条路线。能等就先用炼，14 日系列任务还会给瑞玛丽。');
+    }
+    if (!has('逆翎')) return banner('逆翎',has('夜离')?'夜离已经能收尾。逆翎补驱散、破防和增伤；若免费克洛斯已能帮你推进，可继续存票。':'按零氪推图和先辅助、后爆发的玩法选。教程炼负责收尾，10 月有新号用免费队加逆翎推进到 80 级。');
+    return decision('逆翎已经到手，新人池先停',has('夜离')?'让逆翎先铺减益、夜离收尾。两位的首只都已齐。':'先让逆翎铺减益、炼收尾，任务瑞玛丽领到后再试群攻。',later,'10 月低配实录验证了这条开荒路线；作者到 80 级时只试了部分觉醒本。',[run,official,video]);
   }
-  root.ownedPullPlan = ownedPullPlan;
-  if (typeof module !== 'undefined' && module.exports) module.exports = ownedPullPlan;
-})(typeof window !== 'undefined' ? window : globalThis);
+  root.ownedPullPlan=ownedPullPlan;
+  if(typeof module!=='undefined' && module.exports)module.exports=ownedPullPlan;
+})(typeof window!=='undefined'?window:globalThis);

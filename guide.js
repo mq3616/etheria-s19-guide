@@ -72,48 +72,23 @@ const jump=(key,t)=>'<a class="jump" href="#'+key+'">'+t+' →</a>';
 function route(n){const s=stages[n],checks=s.tasks.map((t,i)=>'<label><input type="checkbox" data-task="'+n+'-'+i+'" '+(state['t'+n+'-'+i]?'checked':'')+'><span>'+t+'</span></label>').join('');
  return head('进度路线','01 / PROGRESSION')+sub(stages.map(s=>s.name),n)+grid(panel('',s.code+'　/　'+s.date,s.title,'<p class="lead">'+s.intro+'</p>'+step(s.steps)+ref(s.refs)),panel('tint','CHECKLIST / 本阶段','我今天要做什么','<div aria-live="polite" class="note" id="done"></div><div class="progress" aria-hidden="true"><i id="bar"></i></div><div class="checks">'+checks+'</div><p class="stripe">'+s.next+'</p>'+jump(n>=3?'fight':'draw',n>=3?'查看副本解法':'看抽取优先级')))}
 function pullPriority(){
- const spending=panel('tint','有限定票或晶钻时','零氪 PvE：第一笔给谁？',
-  '<p class="lead">免费队能推，就先存票。真要花第一笔，按你喜欢的「先铺垫、再爆发」，优先考虑逆翎首只。</p>'+
-  step([['优先候选 · 逆翎','炼可以收尾，逆翎先驱散、破防和增伤，换主攻后也能继续用。10 月 28 日的新号实录用她推到 80 级。只有队伍需要这个功能、且本池保底够才抽；出了第一只就停。'],
-  ['备选 · 夜离','想让夜离做群攻收尾，而且炼清波确实吃力，再把她作为唯一目标。任务后续还送瑞玛丽；已有群攻，或已抽逆翎并能推图，就先存票，不必再补夜离。'],
-  ['本期开荒跳过 · 达罗斯','定位是承伤、复活。没有查到近期零氪新号用他替换免费队后更易推进的实战。极相池的 80 抽规则不能用来计算逆翎或夜离的保底。']])+
-  '<p class="stripe">先看目标、票种、距必得目标的抽数和截止时间；没算清或保底不够，两池都先不抽。</p>'+ref(['run','s19','dar']));
- const gifts=panel('','首只本体怎么来','能领的，不占抽卡名额',
-  '<p><b>教程 · 炼、幻音千明</b><br>10 月新号实录中随教程获得。先用炼清怪、千明拉条加攻，不为开局重抽。</p>'+
-  '<p><b>培养计划 · 克洛斯、凌罗</b><br>S19 官方确认完成相应任务能拿角色和专属晶格。缺破防或治疗先走这里，不花晶钻或自选名额补首只。</p>'+
-  '<p><b>14 日系列任务 · 瑞玛丽、宁芙涅</b><br>官方列明的角色奖励，不是随机 SSR。想要瑞玛丽当输出可以等任务；不必抽夜离过渡。具体哪一步领，看新区任务页。</p>'+
-  '<details><summary>定向、常驻券、自选箱算固定送吗？</summary><p><b>芙蕾雅：</b>是新手定向候选，要召唤；队里缺先手辅助再考虑。<b>常驻券：</b>教程后不为捞某个名字用钻换券，随机出 SSR 不等于指定角色。</p><p><b>梨梨、莉拉姆：</b>S19 公告没承诺入服就送光暗自选箱。真拿到箱，先看名单，再按缺拉条还是缺单体决定；不要预先把两人算进免费队。</p></details>'+ref(['s19','run']));
- return '<p class="stripe"><b>本池首只到手就停。</b> 下一步优先看梨梨补轮转，首领伤害不够改看莉拉姆，后期输出关注葵诺丝复刻。 '+jump('draw/next','按卡关原因选下一位')+'</p>'+grid(spending,gifts);
-}
-function laterPulls(owned, goal){
- const paths=[
-  {id:'turns',label:'让主攻多出手',name:'梨梨',role:'先补主攻的第二轮爆发',body:'逆翎能给敌方铺减益。主攻第一轮伤害够、下一轮跟不上时，梨梨的拉条、减冷却和协战更贴合你的玩法。10 月拿鹤 5928 分录像里，梨梨和免费克洛斯都上场了。',route:'优先查看已领自选箱的名单；有梨梨才选。没有合适箱子就等明确可定向的卡池。11 月祈祝常驻积分箱只含柯卡尔迪、魁洛、席琳丝。',sources:['rank','patch'],extra:roleRefs(abyssExample.sources.slice(0,1)),scene:7},
-  {id:'boss',label:'首领打不动',name:'莉拉姆',role:'先补单体爆发',body:'小怪清得掉、同一个首领却反复超时，且辅助已经能在主攻前破防，就把单体输出排到梨梨前面。已有 SR 谛听可先试打，再决定值不值得用一次自选。',route:'箱内有莉拉姆或未来出现明确目标池时考虑首只。10 月评价支持她打首领，尚缺 S19 新号同装备对比，无法预估换人能快几个回合。',sources:['rank','s19']},
-  {id:'waves',label:'群怪清得慢',name:'夜离',role:'补一名能清波的主攻',body:'逆翎已经能铺垫，短板确实在群伤时，夜离可以成为下一位实际抽取目标。先看炼的装备和任务瑞玛丽的领取进度，再决定是否值得为提前清波投入一份保底。',route:'S19 新人夜离 UP 已公告。在池面截止前算清夜离自己的目标保底，决定要补才出手，拿到首只停。',sources:['run','s19']},
-  {id:'future',label:'为后期输出存票',name:'葵诺丝',role:'关注下一次可定向获取的机会',body:'10 月 28 日璟璃把葵诺丝和逆翎并列为高培养优先，前者负责输出和叠层压制，后者做辅助。想扩充后期输出，可以先为葵诺丝保留预算。',route:'上一轮极相 UP 已于 10 月 14 日结束。截至 11 月 4 日没核到 S19 复刻日期。等新公告确认，再结合当时实战比较她和你已领的瑞玛丽。当前依据是玩家培养评价，缺同装备替换实测。',sources:['rank','kuiPool']}
+ const resourceRows=[
+  ['能固定领的角色','教程先用炼、幻音千明。培养计划领克洛斯和凌罗，14 日系列任务领瑞玛丽和宁芙涅。这些首只留给任务拿。'],
+  ['新手定向召唤','如果缺全队先手，可以定向芙蕾雅。先试幻音千明，再看定向的次数和到期日。'],
+  ['常驻券','教程按要求花。剩余本就打算用的常驻券，可留到 11 月 12–19 日的祈祝活动。积分箱只可选柯卡尔迪、魁洛、席琳丝。'],
+  ['当期极相限定','达罗斯偏承伤和复活。零氪推图可以跳过本期；他的 80 抽保底只按极相规则算。']
  ];
- const path=paths.find(item=>item.id===goal)||paths[0];
- const goalLinks='<div class="libnav" aria-label="选择培养目标">'+paths.map(item=>'<a href="#draw/next/'+item.id+'" '+(item===path?'aria-current="page"':'')+'>'+item.label+'</a>').join('')+'</div>';
- const status=owned.has(path.name)?'已勾选 '+path.name+'。先用现有本体试这个打法，保留抽卡资源。':path.route;
- const active=panel('tint','下一笔资源 · '+path.label,path.name+' · '+path.role,'<p class="lead">'+path.body+'</p><p class="stripe">'+status+'</p>'+inlineArt('people',[path.name],'对照角色')+ref(path.sources)+(path.extra||'')+(path.scene?jump('roster/mine/'+path.scene,'用我的角色看拿鹤配队'):''));
- const timing=panel('','新区获取顺序','抽完首只之后怎么走',step([
-  ['领齐能用的免费角色','先练炼、克洛斯和凌罗。瑞玛丽从 14 日任务获取，领取后再试群伤。'],
-  ['分清手上的资源','缺先手且新手定向还在，芙蕾雅是已确认的定向候选。若免费幻音千明已经能让主攻先动，保留选择到缺口明确时。梨梨和莉拉姆要另查可选名单。'],
-  ['80 级后按想打的本定目标','10 月实录用瑞玛丽、逆翎、善雅、凌罗打觉醒杜兰铎，作者明确写了其他觉醒本尚未尝试。配这个本和冲黑渊分数需要的人不同。']
- ])+ref(['s19','run'])+jump('roster/mine','修改我已拥有的角色'));
- return goalLinks+grid(active,timing);
+ return '<details class="draw-detail" id="draw-free"><summary>免费角色、定向和常驻券怎么用？</summary>'+resourceRows.map(([title,copy])=>'<p><b>'+title+'</b><br>'+copy+'</p>').join('')+ref(['s19','run','patch','dar'])+'</details>';
 }
 function draw(n){
- const pool=pools[n],owned=selectedHeroes(),overview=!location.hash.split('/')[1];
- const summary=panel('tint box-pulls','我的抽卡计划','当前持有 · '+boxCount(owned),
-  jump('roster/mine','编辑我的角色')+'<div class="box-pull-content">'+ownedPullContents(owned)+'</div>');
- const reference=panel('','当前池说明 · '+pool[0],['减益辅助位','新手定向的候选','先确认是否实际发放','群攻输出位','承伤与复活位','常驻券与活动'][n],
-  '<p>'+pool[2]+'</p><p>'+pool[3]+'</p>'+ref(pool[4].split(' ')));
- const later=location.hash.split('/')[1]==='next';
- const current=later?'draw/next':overview?'draw':'draw/'+n;
- const links='<div class="libnav" aria-label="抽卡分页">'+[['抽卡优先级','draw'],['逆翎之后抽谁','draw/next'],...pools.map((x,i)=>[x[0],'draw/'+i])].map(([label,url])=>'<a href="#'+url+'" '+(url===current?'aria-current="page"':'')+'>'+label+'</a>').join('')+'</div>';
- if(later)return head('逆翎之后抽谁','02 / SUMMON')+links+laterPulls(owned,location.hash.split('/')[2]);
- return head('抽卡决策','02 / SUMMON')+links+(overview?pullPriority()+summary:grid(reference,summary));
+ const owned=selectedHeroes(),part=location.hash.split('/')[1];
+ const poolLinks='<div class="draw-pool-links" aria-label="池规则">'+pools.map((p,i)=>'<a href="#draw/'+i+'" '+(part===String(i)?'aria-current="page"':'')+'>'+p[0]+'</a>').join('')+'</div>';
+ const poolRules='<details class="draw-detail" id="draw-pools"><summary>查看各池规则与来源</summary>'+poolLinks+'</details>';
+ if(/^[0-5]$/.test(part||'')){
+  const pool=pools[n];
+  return head(pool[0]+' · 池规则','02 / SUMMON')+'<p>'+jump('draw/mine','回到我的抽卡账单')+'</p>'+panel('','对应资源先查这里',pool[1],'<p>'+pool[2]+'</p><p class="stripe">'+pool[3]+'</p><details class="draw-detail"><summary>查看依据</summary>'+ref(pool[4].split(' '))+'</details>')+poolLinks;
+ }
+ return head('这笔资源给谁？','S19 / 零氪 PvE')+'<article class="panel box-pulls draw-current"><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>'+pullPriority()+poolRules;
 }
 const roleCats=['免费骨架','抽到再练','低星对策'];
 function roster(n){
@@ -153,7 +128,7 @@ function render(){
  if(page==='week' && weekDays.some(plan=>plan.day===Number(part))){app.innerHTML=weeklyChecklist(Number(part))}
  else if(key==='roster' && !['0','1','2'].includes(part)){app.innerHTML=roleLibrary(part,topic)}
  else if(key==='manual'){app.innerHTML=fieldManual(part,topic)}
- else{app.innerHTML=[dayOne,null,route,draw,roster,fight,cal,evidence,atlasView][idx](n,topic);const link=fieldRelated(key,n);if(link)app.querySelector('.sectionhead')?.insertAdjacentHTML('afterend',link)}
+ else{app.innerHTML=[dayOne,null,route,draw,roster,fight,cal,evidence,atlasView][idx](n,topic);const link=key==='draw'?'':fieldRelated(key,n);if(link)app.querySelector('.sectionhead')?.insertAdjacentHTML('afterend',link)}
  app.dataset.key=key;if(key!=='roster'||['0','1','2'].includes(part))illustratePage(key,n,part,topic);refreshProgress();
  flowAfterRender(key);
  document.title=tabs[idx][1]+' · 伊瑟 S19 开荒手册';

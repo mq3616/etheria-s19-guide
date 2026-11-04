@@ -61,17 +61,24 @@ function teamOutcome(index,owned){
 }
 
 function ownedPullContents(owned){
- if(!owned.size&&unreviewedHeroes().length)return '<h3>先保留抽卡预算</h3><p>名单中只有待核实角色，无法判断你已有哪些功能。先补充能核实的上场角色，再决定要不要投入限定票。</p>'+roleRefs([serverDetails]);
- const base=ownedPullPlan(owned,'unknown');
- const target=base.budgetTarget;
- const budget=target?state.pullBudgets?.[target]:'unknown';
- const plan=ownedPullPlan(owned,['covered','short'].includes(budget)?budget:'unknown');
- const chooser=target?'<label for="box-budget">按「'+encodeText(target)+'」池面核算</label><select class="choice" id="box-budget" data-budget-target="'+encodeText(target)+'">'+
-  [['unknown','还没确认目标保底或可用票数'],['short','已确认，预算不够拿到目标'],['covered','已确认，预算足够拿到目标']].map(([key,title])=>'<option value="'+key+'" '+((budget||'unknown')===key?'selected':'')+'>'+title+'</option>').join('')+'</select>':'';
- return (document.getElementById('app') && location.hash.split('/')[0]!=='#draw'?jump('draw','看抽卡优先级和固定获取名单'):'')+'<h3>'+encodeText(plan.title)+'</h3>'+chooser+'<p class="stripe"><b>'+encodeText(plan.action)+'</b></p><p>'+encodeText(plan.reason)+'</p>'+
-  '<p><b>当前新人池的停手线</b>　'+encodeText(plan.stop)+'</p>'+
-  jump('draw/next','下一笔抽谁？看梨梨、莉拉姆和后期输出')+
-  '<details><summary>其他池与本期依据</summary>'+ownedBulletList(plan.alternatives)+'<p class="note">按 11 月 4 日能核实的 S19 池子和近期国服 PvE 资料判断。缺少同练度横向实测时，只给适合补的位置。</p>'+roleRefs(plan.sources)+'</details>';
+ const goals=[['start','刚开荒，想决定首抽'],['waves','小怪清得慢，想现在补群攻'],['boss','清得掉小怪，首领打到超时'],['turns','主攻伤害够，下一轮大招太慢'],['future','暂时能打，想为后期存票']];
+ const [,part,topic]=location.hash.split('/');
+ const requested=location.hash.startsWith('#draw/')&&part==='next'?(topic||'turns'):state.pullGoal;
+ const goal=goals.some(([id])=>id===requested)?requested:'start';
+ const target=ownedPullPlan(owned,'unknown',goal).budgetTarget;
+ const budget=state.pullBudgets?.[target]||'unknown';
+ const plan=ownedPullPlan(owned,budget,goal);
+ const select=(id,label,choices,selected,attrs='')=>'<label for="'+id+'">'+label+'</label><select class="choice" id="'+id+'" '+attrs+'>'+choices.map(([key,title])=>'<option value="'+key+'" '+(selected===key?'selected':'')+'>'+title+'</option>').join('')+'</select>';
+ const onDraw=location.hash.split('/')[0]==='#draw';
+ const keyNames=['逆翎','夜离','梨梨','莉拉姆','瑞玛丽','谛听','葵诺丝','闪萝'];
+ const editor=onDraw?'<fieldset class="pull-owned"><legend>我已经有谁</legend>'+keyNames.map(name=>'<label><input type="checkbox" data-pull-hero="'+name+'" '+(owned.has(name)?'checked':'')+'> '+name+'</label>').join('')+'</fieldset>':'';
+ const ownedNote=owned.size?'':'<p class="note">'+(unreviewedHeroes().length?'已记下的名字尚待核实。以下先显示新号示例。':'还没有勾选角色，以下是刚进新区的示例。')+'</p>';
+ const chooser=target?select('box-budget',target+'池的票够拿到首只吗？',[['unknown','还没算'],['short','保底不够'],['covered','已核实，保底够']],budget,'data-budget-target="'+target+'"'):'';
+ return '<section class="pull-answer" aria-live="polite"><span class="label">'+(owned.size?'按已勾选的角色':'新号示例')+'</span><h3>'+plan.title+'</h3><p>'+plan.action+'</p>'+
+  '<h4>下一步</h4><p>'+plan.next+'</p></section>'+
+  select('pull-goal','按你眼下的问题重排',goals,goal)+editor+chooser+
+  (!owned.size&&unreviewedHeroes().length?ownedNote:'')+
+  '<details><summary>为什么这样排？看实战和获取条件</summary><p>'+plan.basis+'</p>'+roleRefs(plan.sources)+'</details>';
 }
 
 function ownedPlanner(topic){
@@ -93,6 +100,20 @@ function updateBoxResults(){
 }
 document.addEventListener('change',event=>{
  const input=event.target;
+ if(input.matches('[data-pull-hero], #pull-goal')){
+  if(input.id==='pull-goal'){
+   state.pullGoal=input.value;
+   if(location.hash.startsWith('#draw/next'))history.replaceState(history.state,'','#draw/mine');
+  }
+  else{
+   const owned=selectedHeroes(), name=input.dataset.pullHero;
+   if(input.checked)owned.add(name);else owned.delete(name);
+   state.ownedHeroes=[...owned];
+  }
+  save();updateBoxResults();
+  const selector=input.id?'#pull-goal':'[data-pull-hero="'+input.dataset.pullHero+'"]';
+  document.querySelector(selector)?.focus({preventScroll:true});return;
+ }
  if(input.matches('[data-hero]')){
   const owned=selectedHeroes();
   if(input.checked)owned.add(input.dataset.hero);else owned.delete(input.dataset.hero);
