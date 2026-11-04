@@ -6,3 +6,5 @@ ul.book-slots{list-style:none;margin:12px 0;padding:0}.book-slots li{border-top:
 @media(max-width:640px){.book-filter>div{display:block}.book-chips{margin-top:5px}.book-pair{grid-template-columns:1fr;gap:6px}.book-pair>div{display:grid;grid-template-columns:2.2em 1fr;gap:4px}.book-body{padding:9px 12px}.book-hero img{width:32px;height:32px}.book-heading{flex-wrap:wrap}.book-intro a{font-size:.9rem}}
 .book-index{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:14px}.book-index b{font-size:.8rem;color:var(--dim);margin-right:3px}.book-index button{font:inherit;font-size:.83rem;color:var(--teal);border:0;border-bottom:1px solid var(--line);padding:3px 1px;background:transparent;cursor:pointer}.book-card{scroll-margin-top:5.5rem}
 .book-match{border-left:3px solid var(--teal);padding:5px 10px;margin-bottom:8px;background:var(--tinted)}.book-match p{margin:2px 0}
+
+.book-chips a{min-height:44px;display:inline-flex;align-items:center}.book-index button{min-height:40px;padding:5px 7px;border:1px solid var(--line);border-radius:5px}.book-hero>div{min-width:0}.book-access{overflow-wrap:anywhere}.book-card summary:focus-visible{outline-offset:3px}

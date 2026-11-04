@@ -16,7 +16,7 @@ function tierTable(){
  return '<section class="tier-panel" aria-label="PvE 角色强度表"><p class="tier-intro">前期看新号推图和刷本，后期看成型后打觉醒、黑渊等高难本。共收录 '+total+' 位，分档综合实录和玩家评价，跨服样本单独标明。核对至 2026 年 11 月 4 日。</p>'+
   '<p class="tier-key"><b>S</b> 优先核心　<b>A</b> 强力或专本主力　<b>B</b> 过渡或对策　<b>?</b> 近期依据不足</p>'+
   '<label class="tier-search">找角色 <input id="tier-search" type="search" placeholder="输入角色名" value="'+encodeText(tierQuery)+'"></label>'+
-  '<span class="note">点列名排序，点角色看用途和出处。</span><div id="tier-results">'+tierRows()+'</div></section>';
+  '<span class="note">点列名排序，点角色展开用途和出处；可同时展开多人对比。</span><div id="tier-results">'+tierRows()+'</div></section>';
 }
 function tierRows(){
  const sort = tierSortKey(), owned = selectedHeroes();
@@ -57,7 +57,7 @@ document.addEventListener('input',event=>{
 });
 document.addEventListener('click',event=>{
  const sort=event.target.closest('[data-tier-sort]');
- if(sort){tierPage=0;if(sort.hash===location.hash)document.getElementById('tier-results').innerHTML=tierRows();return}
+ if(sort){tierPage=0;if(sort.hash===location.hash)document.getElementById('tier-results').innerHTML=tierRows();requestAnimationFrame(()=>document.querySelector('[data-tier-sort="'+sort.dataset.tierSort+'"]')?.focus({preventScroll:true}));return}
  const toggle=event.target.closest('[data-tier-name]');
  if(toggle){
   const name=toggle.dataset.tierName;

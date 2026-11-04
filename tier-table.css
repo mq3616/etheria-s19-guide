@@ -7,3 +7,5 @@
 .tier-table .tier-detail td{text-align:left;background:var(--paper);padding:10px 14px}.tier-detail dl{display:grid;grid-template-columns:2.5em 1fr;gap:5px;margin:0}.tier-detail dd{margin:0}.tier-detail dt{color:var(--teal)}
 .tier-pager{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:12px}.tier-pager button{padding:6px 12px;min-height:40px}.tier-pager button:disabled{opacity:.45}.tier-pager span{font-size:13px}#tier-results{scroll-margin-top:58px}
 @media(max-width:600px){.tier-search{display:flex;margin-bottom:5px}.tier-table{font-size:13px}.tier-table button img{width:23px;height:23px}.tier-table button{gap:3px}.tier-table th:first-child{width:36%}.tier-table td{padding:4px 1px}.tier-panel>span.note{display:block}}
+
+.tier-search input,.tier-table button,.tier-table thead a,.tier-pager button{min-height:44px}.tier-table td:last-child{overflow-wrap:anywhere}

@@ -52,13 +52,13 @@ function personFaces(names,label){
 function rankingOverview(){
  const sections=[
   ['先养谁','进剧情先用炼，拿到克洛斯就替下格雷，缺续航再上凌罗。三人有专属培养资源。零氪把第一套能用的输出装交给炼，资源不足时先练这一队。',['炼','克洛斯','凌罗'],[octoberRun,serverDetails]],
-  ['第一笔限定给谁','喜欢辅助铺垫、主攻收尾，先考虑逆翎首只。10 月低配新号用她一路打到 80 级，近期作者也认可她的泛用性。预算不够保底就继续用克洛斯。夜离补群伤，而 S19 的 14 日任务还会给瑞玛丽，已有清场位可以停抽。',['逆翎','夜离','瑞玛丽'],[octoberRun,octoberReview,serverDetails]],
+  ['第一笔限定给谁','喜欢辅助铺垫、主攻收尾，先考虑逆翎首只。10 月低配新号用她一路打到 80 级，近期作者也认可她的泛用性。预算不够保底就继续用克洛斯。夜离补群伤，已有清场位就跳过她这一池。逆翎到手后，下一次可指定机会优先看梨梨；若首领缺单体，先用已有谛听，再决定是否补莉拉姆。',['逆翎','梨梨','夜离','瑞玛丽'],[octoberRun,octoberReview,serverDetails]],
   ['已经出了更强的输出，换哪一格','已有葵诺丝，优先在输出位与炼对照，特别是之后要打黑渊或暗笼时。她不承担逆翎的辅助职责。缺的是单体爆发才看莉拉姆；遇到能吃持续伤害的目标，才另试莎朗。两者都不用为推普通剧情另开一队。',['葵诺丝','莉拉姆','莎朗'],[octoberReview]],
   ['新卡和觉醒，哪些现在用','十月的什炎限定在 11/4 结束；S19 次日开服，首抽不围绕他组队。旭光妮璐到手再看增伤位。普通 SR 谛听在 9 月新增觉醒，须到 80 级且全技能满，比较首周阵容时按未觉醒算。达罗斯是承伤与复活位。你这条爆发路线先用免费的凌罗稳血，把限定预算留给实际缺口。',['什炎','旭光妮璐','谛听','达罗斯','闪萝','荼蘼'],[src.octpatch,src.awake,src.dar,src.nicole]]
  ];
  const opened=Array.isArray(state.rankOpen)?state.rankOpen:[Number(state.rankAuthor)||0];
  const cards=sections.map(([title,body,names,refs],i)=>'<details class="rank-author" data-author="'+i+'" '+(opened.includes(i)?'open':'')+'><summary>'+String(i+1).padStart(2,'0')+' · '+title+'</summary><div class="rank-author-body"><p>'+body+'</p>'+personFaces(names,title)+roleRefs(refs)+'</div></details>').join('');
- return '<p class="lead">国服 S19 · 11 月 4 日开服前校订。顺序按你作为零氪 PvE 新人的资源安排；角色页区分当期实测、技能说明和暂缓投资。</p><div class="related"><b>第一支队怎么站？</b><a href="#roster/scene/0">看 10 月新号的开局四人和换人顺序 →</a><a href="#roster/scene/7">后期 · 国际服拿鹤五人队 →</a><a href="#roster/scene/9">觉醒谛听 · 双人速刷与替代 →</a></div><div class="rank-studies roster-ranks">'+cards+'</div>';
+ return '<p class="lead">国服 S19 · 11 月 4 日开服前校订。顺序按你作为零氪 PvE 新人的资源安排；角色页区分当期实测、技能说明和暂缓投资。</p><div class="related"><b>先选下一步</b><a href="#draw/order">看完整抽取顺序与换池条件 →</a><a href="#roster/teams">按玩法、进度找队伍和平替 →</a><a href="#roster/scene/0">看 10 月新号的开局四人和换人顺序 →</a><a href="#roster/scene/7">后期 · 国际服拿鹤五人队 →</a><a href="#roster/scene/9">觉醒谛听 · 双人速刷与替代 →</a></div><div class="rank-studies roster-ranks">'+cards+'</div>';
 }
 function libraryPicker(kind,items,idx){
  const label=kind==='person'?'选择角色':'选择场景';

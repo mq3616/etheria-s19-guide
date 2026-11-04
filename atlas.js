@@ -5,7 +5,7 @@ const atlasRole={炼:'清波主攻',克洛斯:'破防铺垫',凌罗:'治疗续�
 function artSet(group){return group==='people'?window.peopleArt:group==='explore'?window.exploreArt:window.mapArt}
 function artEntry(group,key){let data=artSet(group)?.[key];if(!data)return null;return {...data,key,group,title:group==='people'?key:(data.title||atlasMapNames[key]||key)}}
 function makePlates(entries,layout){const items=entries.filter(Boolean);if(!items.length)return '';
- return '<div class="plates '+layout+'">'+items.map(im=>{const e=encodeText,portrait=im.group==='people';return '<figure class="plate '+(portrait?'is-person':'is-map')+'"><button type="button" class="art-trigger" data-group="'+e(im.group)+'" data-art="'+e(im.key)+'" aria-label="放大查看'+e(im.title)+'"><img loading="lazy" decoding="async" src="'+e(im.src)+'" alt="'+e(im.title)+'"><span class="art-enlarge" aria-hidden="true">⤢</span></button><figcaption><strong>'+e(im.title)+'</strong><span>'+e(portrait?(atlasRole[im.key]||im.caption):im.caption)+'</span></figcaption></figure>'}).join('')+'</div>'}
+ return '<div class="plates '+layout+'">'+items.map(im=>{const e=encodeText,portrait=im.group==='people';return '<figure class="plate '+(portrait?'is-person':'is-map')+'"><button type="button" class="art-trigger" data-group="'+e(im.group)+'" data-art="'+e(im.key)+'" aria-label="放大查看'+e(im.title)+'"><img loading="lazy" decoding="async" src="'+e(im.src)+'" alt="'+e(im.title)+'"><span class="art-enlarge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg></span></button><figcaption><strong>'+e(im.title)+'</strong><span>'+e(portrait?(atlasRole[im.key]||im.caption):im.caption)+'</span></figcaption></figure>'}).join('')+'</div>'}
 function atlasView(n,place){
  const groups=['people','explore','maps'],g=groups[n], titles=['角色认人','主线地图','副本现场'];
  const text=['对照头像找人，点击图片可查看大图和出处。','按图上的地名和地标对照自己的地图。截图对应发布时的版本。','先认挑战入口与选关画面，再看对应 Boss。原片入口在大图下方。'];
@@ -34,14 +34,19 @@ function illustratePage(key,n,part,topic){
  if(section==='growth'){if(i===0)explore();else if(i===1)m('hub','growth');else if(i===3)m('forge');else if(i===4)m('binghuo');return}
  if(i===0)p(['逆翎','夜离']);else if(i===1)m('binghuo','duoqi','aoluola');else if(i===2)p(['炼','克洛斯','凌罗']);else if(i===3)m('forge');else if(i===5)explore();else if(i===6)p(['瑞玛丽'])
 }
-let artItems=[],artIndex=0;
+let artItems=[],artIndex=0,artReturnFocus=null;
 function showArtIndex(i){const dlg=document.querySelector('#artViewer'),im=artItems[i];if(!im)return;artIndex=i;
- activeArtLink(im);setArtZoom(false);dlg.querySelector('h2').textContent=im.title;const img=dlg.querySelector('img');img.src=im.full||im.src;img.alt=im.title;dlg.classList.toggle('portrait-mode',im.group==='people');dlg.querySelector('.art-caption').textContent=im.caption;dlg.querySelector('.art-credit').textContent=im.credit+' ↗';dlg.querySelector('.art-credit').href=im.url;dlg.querySelector('.art-count').textContent=(i+1)+' / '+artItems.length;
+ activeArtLink(im);setArtZoom(false);dlg.querySelector('h2').textContent=im.title;const img=dlg.querySelector('img');img.dataset.fallback=im.src;img.src=im.full||im.src;img.alt=im.title;artImageStatus.textContent='图片载入中…';dlg.classList.toggle('portrait-mode',im.group==='people');dlg.querySelector('.art-caption').textContent=im.caption;dlg.querySelector('.art-credit').textContent=im.credit+' ↗';dlg.querySelector('.art-credit').href=im.url;dlg.querySelector('.art-count').textContent=(i+1)+' / '+artItems.length;
  for(const [cls,bound] of [['prev',i===0],['next',i===artItems.length-1]])dlg.querySelector('.art-'+cls).disabled=bound;
 }
 document.addEventListener('click',e=>{const btn=e.target.closest('.art-trigger');if(!btn)return;const peers=[...btn.closest('.plates').querySelectorAll('.art-trigger')];
- artItems=peers.map(b=>artEntry(b.dataset.group,b.dataset.art));showArtIndex(peers.indexOf(btn));document.querySelector('#artViewer').showModal()});
+ artReturnFocus=btn;artItems=peers.map(b=>artEntry(b.dataset.group,b.dataset.art));showArtIndex(peers.indexOf(btn));document.querySelector('#artViewer').showModal()});
 const artDialog=document.querySelector('#artViewer');
+const artImageStatus=document.createElement('p');artImageStatus.className='art-image-status';artImageStatus.setAttribute('role','status');artDialog.querySelector('.zoom-stage').after(artImageStatus);
+const artDisplayImage=artDialog.querySelector('.zoom-stage img');
+artDisplayImage.addEventListener('load',()=>{artImageStatus.textContent=''});
+artDisplayImage.addEventListener('error',()=>{const fallback=artDisplayImage.dataset.fallback;if(fallback&&artDisplayImage.src!==new URL(fallback,location.href).href){artDisplayImage.src=fallback;artImageStatus.textContent='原图暂不可用，正在显示预览图。'}else artImageStatus.textContent='图片未能载入，可以从下方原文查看。'});
+artDialog.addEventListener('close',()=>requestAnimationFrame(()=>{if(artReturnFocus?.isConnected)artReturnFocus.focus({preventScroll:true})}));
 function setArtZoom(on){const stage=artDialog.querySelector('.zoom-stage'),button=artDialog.querySelector('.art-zoom');stage.classList.toggle('zoomed',on);button.setAttribute('aria-pressed',String(on));button.textContent=on?'适应窗口':'查看原图尺寸';stage.scrollLeft=0;stage.scrollTop=0;}
 artDialog.querySelector('.art-zoom').addEventListener('click',e=>setArtZoom(e.currentTarget.getAttribute('aria-pressed')!=='true'));
 artDialog.querySelector('.zoom-stage img').addEventListener('click',()=>setArtZoom(!artDialog.querySelector('.zoom-stage').classList.contains('zoomed')));

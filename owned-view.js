@@ -33,10 +33,10 @@ function ownedEditor(owned){
  return '<details class="box-editor" '+(!owned.size?'open':'')+'><summary>勾选已有角色 <span data-owned-count>'+boxCount(owned)+'</span></summary>'+
   '<p class="note">只勾已经到账的角色。勾选后建议会更新，并保存在这个浏览器。</p>'+
   '<fieldset><legend>新区常用角色</legend><div class="box-choices">'+primary.map(choice).join('')+'</div></fieldset>'+
-  '<button type="button" data-add-starter>我已领齐教程四人，一键勾选</button><small class="note"> 幻音千明、炼、卡奇、格雷</small>'+
+  '<button type="button" data-add-starter>这四人已到手，一键勾选</button><small class="note"> 幻音千明、炼、卡奇、格雷；只在实际已获得时勾选。</small>'+
   '<details class="more-heroes"><summary>其他角色（'+others.length+'）</summary><div class="box-choices">'+others.map(choice).join('')+'</div>'+
   '<label for="extra-hero">没找到角色？可以先记下名字</label><div class="extra-hero-row"><input id="extra-hero" maxlength="22" placeholder="角色全名"><button type="button" data-add-extra>记入名单</button></div><p class="note">未收录的角色单列为待核实，不据名字推测其强度。</p><div id="extra-hero-list">'+extraChips()+'</div><p class="note" id="extra-status" role="status"></p></details>'+
-  '<a class="jump" href="#box-results" data-show-results>看配队结果 ↓</a></details>';
+  '<p class="note owned-change-status" data-owned-status role="status"></p><a class="jump" href="#box-results" data-show-results>看配队结果 ↓</a></details>';
 }
 
 function ownedBulletList(items){
@@ -57,7 +57,7 @@ function teamOutcome(index,owned){
   }).join('')+'</div>':'<p class="stripe">当前名单凑不出有依据的上场位。</p>')+
   '<h4>谁先动</h4>'+ownedBulletList(plan.order)+'<h4>下一步先练谁</h4>'+ownedBulletList(plan.train)+
   (plan.missing.length?'<p class="note"><b>缺口或待确认</b>　'+encodeText(plan.missing.join('、'))+'</p>':'')+
-  '<p class="stripe">'+encodeText(plan.limit)+'</p><details><summary>查看本场依据与原始样本</summary>'+roleRefs(plan.sources)+jump('roster/scene/'+index,'打开场景详解')+'</details>';
+  '<p class="stripe">'+encodeText(plan.limit)+'</p><details data-team-basis><summary>查看本场依据与原始样本</summary>'+roleRefs(plan.sources)+jump('roster/scene/'+index,'打开场景详解')+'</details>';
 }
 
 function ownedPullContents(owned){
@@ -79,7 +79,7 @@ function ownedPullContents(owned){
   '<h4>'+(plan.opportunities?'什么情况下换目标':'下一步')+'</h4><p>'+plan.next+'</p></section>'+
   select('pull-goal','按你眼下的问题重排',goals,goal)+opportunities+editor+chooser+
   (!owned.size&&unreviewedHeroes().length?ownedNote:'')+
-  '<details><summary>为什么这样排？看实战和获取条件</summary><p>'+plan.basis+'</p>'+roleRefs(plan.sources)+'</details>';
+  '<details data-pull-basis><summary>为什么这样排？看实战和获取条件</summary><p>'+plan.basis+'</p>'+roleRefs(plan.sources)+'</details>';
 }
 
 function ownedPlanner(topic){
@@ -91,13 +91,25 @@ function ownedPlanner(topic){
   '<article class="panel box-pulls"><div class="label">按当前名单 · 零氪 PvE 抽卡</div><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>';
 }
 
+function replaceOwnedPull(pull){
+ const basisOpen=pull.querySelector('[data-pull-basis]')?.open;
+ pull.innerHTML=ownedPullContents(selectedHeroes());
+ if(basisOpen)pull.querySelector('[data-pull-basis]').open=true;
+}
+
 function updateBoxResults(){
  const owned=selectedHeroes(),selector=document.getElementById('box-scene'),team=document.getElementById('box-team');
  const count=document.querySelector('[data-owned-count]');
  if(count)count.textContent=boxCount(owned);
- if(team&&selector)team.innerHTML=teamOutcome(savedScene(selector.value),owned);
+ const status=document.querySelector('[data-owned-status]');
+ if(status)status.textContent='已保存 '+boxCount(owned)+'，下方配队与抽卡建议已更新。';
+ if(team&&selector){
+  const basisOpen=team.querySelector('[data-team-basis]')?.open;
+  team.innerHTML=teamOutcome(savedScene(selector.value),owned);
+  if(basisOpen&&team.querySelector('[data-team-basis]'))team.querySelector('[data-team-basis]').open=true;
+ }
  const pull=document.querySelector('.box-pull-content');
- if(pull)pull.innerHTML=ownedPullContents(owned);
+ if(pull)replaceOwnedPull(pull);
 }
 document.addEventListener('change',event=>{
  const input=event.target;
@@ -127,7 +139,7 @@ document.addEventListener('change',event=>{
  }else if(input.id==='box-budget'){
   state.pullBudgets={...state.pullBudgets,[input.dataset.budgetTarget]:input.value};save();
   const pull=document.querySelector('.box-pull-content');
-  pull.innerHTML=ownedPullContents(selectedHeroes());
+  replaceOwnedPull(pull);
   document.getElementById('box-budget')?.focus({preventScroll:true});
  }
 });
@@ -159,7 +171,7 @@ document.addEventListener('click',event=>{
    input.value='';
   }
   document.getElementById('extra-hero-list').innerHTML=extraChips();
-  save();updateBoxResults();return;
+  save();updateBoxResults();input.focus({preventScroll:true});return;
  }
  if(event.target.closest('[data-add-starter]')){
   const owned=selectedHeroes();
@@ -172,3 +184,5 @@ document.addEventListener('click',event=>{
   results.focus({preventScroll:true});results.scrollIntoView({block:'start'});
  }
 });
+
+document.addEventListener('keydown',event=>{if(event.target.id==='extra-hero'&&event.key==='Enter'){event.preventDefault();document.querySelector('[data-add-extra]')?.click();}});

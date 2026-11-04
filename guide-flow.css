@@ -4,3 +4,18 @@
 
 .atlas-pages{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px}.atlas-pages a{display:inline-flex;align-items:center;min-height:38px;padding:4px 14px;text-decoration:none;border:1px solid var(--line);border-radius:4px}.atlas-pages a[aria-current]{background:var(--teal);color:white}.atlas-page .archive:has(.is-map){grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}.atlas-page .archive:has(.is-map):has(>:only-child){max-width:700px}.photo-links{margin-bottom:8px}
 @media(max-width:550px){[data-key=roster]>.libnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}[data-key=roster]>.libnav a{display:grid;place-items:center;min-height:40px;text-align:center;font-size:12px;padding:4px 0}.atlas-page .archive:has(.is-map){grid-template-columns:1fr}}
+
+/* Primary tasks stay visible; secondary guides live in a labelled, keyboard-accessible menu. */
+.guide-icon{width:18px;height:18px;flex:0 0 18px;vertical-align:-3px;pointer-events:none}
+#nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 80px 80px;position:sticky;top:0;z-index:5;overflow:visible}
+#nav>a,#nav>button,#nav .extra-nav a{display:flex;align-items:center;justify-content:center;gap:7px;min-height:46px;padding:9px 10px;text-decoration:none;white-space:nowrap}
+#nav .find-open{order:3}#nav .nav-more{display:flex;order:4}#nav .extra-nav{display:none;position:absolute;right:0;top:100%;width:min(100%,600px);grid-template-columns:repeat(3,minmax(0,1fr));background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 24px #0005;order:5;z-index:6}
+#nav.expanded .extra-nav{display:grid}#nav .extra-nav a{justify-content:flex-start;white-space:normal}
+#nav .nav-more.contains-current{box-shadow:inset 0 -3px var(--teal)}#nav .nav-more[aria-expanded=true]{background:var(--tinted);color:var(--teal)}
+#nav a:hover,#nav button:hover{background:var(--tinted)}#nav a[aria-current=page]{background:var(--teal);color:var(--on-accent)}
+#nav a:focus-visible,#nav button:focus-visible,#find-results a:focus-visible{outline:2px solid var(--teal);outline-offset:-3px}
+.plan-back{display:inline-flex;align-items:center;gap:6px;min-height:42px}.plan-back .guide-icon{width:16px;height:16px;flex-basis:16px}
+.find-dialog{max-width:calc(100vw - 24px);padding:18px}.find-head{gap:12px}.find-head h2{font-size:1.25rem;margin:0}.find-head button{min-width:70px;min-height:44px}.find-dialog input{background:var(--paper);color:var(--ink);min-height:46px;font-size:16px;border-color:var(--rule)}#find-count{font-size:13px;color:var(--dim);line-height:1.6}#find-results a{min-height:48px;gap:10px;padding:10px 4px}#find-results a:hover,#find-results a:focus-visible{background:var(--tinted)}#find-results .guide-icon{margin-left:auto;color:var(--teal);width:16px;height:16px;flex-basis:16px}.find-empty p{font-size:14px;line-height:1.6;color:var(--dim)}#find-results .find-empty .guide-icon{margin-left:0}.find-empty{padding:4px}
+@media(max-width:850px){#nav{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(48px,.7fr) minmax(48px,.7fr)}#nav>a,#nav>button{padding:6px 2px;min-height:50px;gap:4px;font-size:13px}#nav .extra-nav{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}#nav .extra-nav a{padding:12px 10px;min-height:48px;font-size:13px}}
+@media(max-width:550px){#nav>a,#nav>button{flex-direction:column;gap:2px;min-height:57px;font-size:12px}#nav .guide-icon{width:17px;height:17px;flex-basis:17px}#nav .extra-nav a{gap:6px}.find-dialog{padding:14px}.plan-back{min-height:40px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

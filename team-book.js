@@ -4,6 +4,8 @@ const bookStages={all:'不限进度',early:'前期',mid:'中期',late:'后期'};
 const bookTips={all:'先挑要解决的问题，再决定养哪队。',story:'先靠已送角色推进。只有推不动时，才换那一格。',gear:'游戏里对应「熔断禁区」：这里刷源器套装和主词条。',shell:'游戏里对应「凶影追缉」：这里刷智壳，和刷源器是两个入口。',hard:'先看原队条件与面板，再决定手里的角色能不能替。',event:'先看活动是否要打、要几队，再决定值不值得专门养人。',pvp:'竞技场进攻、实时对战和限时规则分开看。只玩 PvE 可以跳过整栏。'};
 const bookTeams=()=>[...(window.teamPve||[]),...(window.teamPvp||[])];
 const bookOpen=new Map();
+let bookOpenLoaded=false;
+function loadBookOpen(){if(!bookOpenLoaded){for(const [key,value] of Object.entries(state.teamBookOpen||{}))if(typeof value==='boolean')bookOpen.set(key,value);bookOpenLoaded=true;}}
 // Repeatable farms span progression; activity/PvP are overlapping goals.
 const bookAlso={ 'binghuo-gear':{stages:['late']}, 'aoluola-gear':{stages:['late']},'duoqi-gear':{stages:['late']},'abyss-nahe':{scenes:['hard']},'event-five-squads':{scenes:['pvp']} };
 const bookDimensions=t=>({stages:[t.stage,...(bookAlso[t.id]?.stages||[])],scenes:[t.scene,...(bookAlso[t.id]?.scenes||[])]});
@@ -16,7 +18,8 @@ function bookHero(name,owned){
  '<div class="book-access">'+(access[2]?'<a href="'+e(access[2])+'" target="_blank" rel="noopener">'+e(access[0])+' ↗</a>':'<b>'+e(access[0])+'</b>')+' · '+e(access[1])+'</div></div></div>';
 }
 function bookCard(t,index,owned){
- const e=encodeText,open=bookOpen.get(t.id)??index===0;
+ const e=encodeText,open=(t.id===location.hash.split('/')[4]|| (bookOpen.get(t.id)??index===0));
+ const refsOpen=bookOpen.get(t.id+'-refs')===true;
  const slots=t.slots.map(([job,name,alt,note])=>'<li><h4>'+e(job)+'</h4><div class="book-pair"><div><small>首选</small>'+bookHero(name,owned)+'</div><div><small>替位</small>'+(alt?bookHero(alt,owned):'<span class="book-none">暂无已核实的同位平替</span>')+'</div></div>'+(note?'<p class="book-swap">'+e(note)+'</p>':'')+'</li>').join('');
  const chosen=new Set(t.slots.map(x=>x[1]).filter(n=>owned.has(n)));
  const match=owned.size&&t.slots.length?'<div class="book-match"><b>按你已勾选的角色</b><p>'+t.slots.map(([job,n,a])=>{
@@ -28,9 +31,10 @@ function bookCard(t,index,owned){
  return '<details class="book-card" data-team-id="'+e(t.id)+'" '+(open?'open':'')+'><summary><span class="book-kicker">'+bookDimensions(t).stages.map(k=>bookStages[k]).join('、')+' / '+bookDimensions(t).scenes.map(k=>bookScenes[k]).join('、')+'</span><strong>'+e(t.title)+'</strong><span class="book-lineup">'+(t.slots.length?t.slots.map(x=>e(x[1])).join(' · '):'规则与参与条件')+(owned.size&&t.slots.length?'　｜ 已有首选 '+hit+'/'+t.slots.length:'')+'</span></summary><div class="book-body"><p class="book-when">'+e(t.when)+'</p>'+match+'<p class="book-evidence"><b>依据</b> '+e(t.evidence)+'</p>'+
  (slots?'<ul class="book-slots">'+slots+'</ul>':'')+
  '<div class="book-move"><b>'+(slots?'出手与打法':'怎么参加')+'</b><p>'+e(t.order)+'</p></div><div class="book-pull"><b>为这队花票吗？</b><p>'+e(t.pull)+'</p></div>'+
- '<details class="book-refs"><summary>攻略原文与规则</summary>'+roleRefs(t.refs)+'</details></div></details>';
+ '<details class="book-refs" data-team-refs="'+e(t.id)+'" '+(refsOpen?'open':'')+'><summary>攻略原文与规则</summary>'+roleRefs(t.refs)+'</details></div></details>';
 }
 function teamBook(requestedScene,requestedStage){
+ loadBookOpen();
  const scene=Object.hasOwn(bookScenes,requestedScene)?requestedScene:'story',stage=Object.hasOwn(bookStages,requestedStage)?requestedStage:'all';
  const all=bookTeams(),fits=(t,s,g)=>(s==='all'||bookDimensions(t).scenes.includes(s))&&(g==='all'||bookDimensions(t).stages.includes(g));
  const rows=all.filter(t=>fits(t,scene,stage)),owned=selectedHeroes();
@@ -48,6 +52,14 @@ function teamBook(requestedScene,requestedStage){
  (rows.map((t,i)=>bookCard(t,i,owned)).join('')||'<p>暂无这个阶段、这个玩法的队伍资料。</p><div class="book-intro"><a href="'+bookNav(scene,'all')+'">看「'+bookScenes[scene]+'」的其他进度 →</a><a href="'+bookNav('all',stage)+'">看「'+bookStages[stage]+'」的其他玩法 →</a></div>')+
  '<div class="book-intro"><a href="#roster/rank">新区培养顺序 →</a><a href="#roster/scene">副本条件详解 →</a><a href="#roster/person">查看角色档案 →</a></div>';
 }
-document.addEventListener('toggle',e=>{const card=e.target;if(card.matches?.('details[data-team-id]')&&card.isConnected)bookOpen.set(card.dataset.teamId,card.open)},true);
+document.addEventListener('toggle',e=>{const card=e.target;if(card.matches?.('details[data-team-id],details[data-team-refs]')&&card.isConnected){bookOpen.set(card.dataset.teamId||card.dataset.teamRefs+'-refs',card.open);state.teamBookOpen=Object.fromEntries(bookOpen);save()}},true);
 
 document.addEventListener('click',e=>{const b=e.target.closest('[data-show-team]');if(!b)return;const c=Array.from(document.querySelectorAll('[data-team-id]')).find(n=>n.dataset.teamId===b.dataset.showTeam);if(c){c.open=true;c.querySelector('summary').focus({preventScroll:true});c.scrollIntoView({block:'start'});}});
+
+function focusLinkedTeam(){
+ const [,section,,,id]=location.hash.slice(1).split('/');
+ if(section!=='teams'||!id)return false;
+ const card=[...document.querySelectorAll('[data-team-id]')].find(c=>c.dataset.teamId===id);
+ if(!card)return false;
+ card.open=true;card.scrollIntoView({block:'start'});card.querySelector('summary').focus({preventScroll:true});return true;
+}

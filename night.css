@@ -23,3 +23,12 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,su
 .find-dialog::backdrop,.art-modal::backdrop{background:rgb(5 8 13 / .84)}
 .art-modal,.find-dialog{box-shadow:0 18px 70px #0008}
 ::selection{background:#9be5d1;color:#10211b}
+
+/* Keep the guide, rather than a repeated masthead, in the first screen. */
+.frame>.hero,.frame>header .hero{padding:16px 0 18px;gap:20px;grid-template-columns:1fr 170px}
+.frame>header .hero h1{font-size:clamp(28px,3.3vw,42px);margin:2px 0 4px}
+.frame>header .radar{height:78px}.frame>header .top{padding:9px 0}
+.skip-guide{position:fixed;left:12px;top:8px;z-index:40;padding:8px 12px;transform:translateY(-160%);background:var(--teal);color:var(--on-accent)}.skip-guide:focus{transform:none}
+.footer{align-items:center}.return-top{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:3px 9px;color:var(--teal);background:transparent}
+#app{scroll-margin-top:50px}.panel+.panel{margin-top:14px}.grid>.panel+.panel{margin-top:0}
+@media(max-width:700px){.frame>header .hero{grid-template-columns:1fr;gap:0;padding:9px 0 11px}.frame>header .top{padding:6px 0}.frame>header .hero p{font-size:13px}.frame>header .hero h1{font-size:27px}.frame>header .kicker{letter-spacing:.05em}.sectionhead{gap:5px 12px}}

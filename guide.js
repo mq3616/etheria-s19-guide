@@ -16,17 +16,17 @@ const stages=[
  ['选对服务器','北京时间 10:00 后选 S19「忘忧梦火」。暂时看不到时，按官方说明重启后再看。'],
  ['跟主线和超链之证走','先用教程 SSR 炼清小怪，优先升级她和当前上阵的队员。打开新链成长计划，能领的套装就先穿。'],
  ['找到两个送卡入口','培养计划看克洛斯、凌罗各自条件；14 日任务看瑞玛丽、宁芙涅。按实际到账顺序换人，过渡期用格雷等已有角色。'],
- ['分开三笔资源','限定票按池面所需类型单独预算；常驻券只用到队伍能推；通用晶钻先存。新手定向先看倒计时和可选名单。']],tasks:['确认 S19，领首次签到','在活动页标记四名赠送英雄','完成一场辅助先动、炼后动的战斗'],next:'先去「抽卡决策」看逆翎和夜离怎么二选一。',refs:['s19','run']},
+ ['分开三笔资源','限定票按池面所需类型单独预算；常驻券只用到队伍能推；通用晶钻先存。新手定向先看倒计时和可选名单。']],tasks:['确认 S19，领首次签到','在活动页标记四名赠送英雄','完成一场辅助先动、炼后动的战斗'],next:'先去「抽卡决策」看逆翎首只之后，何时补梨梨、单体或夜离。',refs:['s19','run']},
  {name:'第 2–3 天',code:'D02—03',date:'11.06—07',title:'定主攻，补一个缺口',intro:'把免费抽取和任务奖励摊开看，再决定第一笔定向资源。不要求重新刷号。',steps:[
  ['只补最缺的功能','先看有没有稳定削弱、治疗和对单伤害。教程炼能过图，就先等培养奖励；若常驻出了逆翎或夜离，立刻更新抽卡计划。'],
  ['遇到自选箱，再作选择','先查是否真的领到箱、有哪些候选。想让同一主攻多出手，又缺这项功能，名单里有梨梨才选她；已经能轮转，就保留到缺口明确。别把原相定向和角色自选当作同一个池。'],
  ['调一次真实出手顺序','用同一难度连续打一场，观察克洛斯能否在主攻手出手前挂上减益。先解决出手顺序，再给输出换攻击装备。']],tasks:['核对自选范围和使用期限','确定一个主攻和一个治疗','查看自动战斗首轮顺序'],next:'如果 Boss 扛得住但小怪清不掉，先练群攻；反过来则补谛听这样的单体位。',refs:['s19','rank','run']},
  {name:'第 4–7 天',code:'D04—07',date:'11.08—11',title:'把手动首通变成稳定自动',intro:'比账号等级更有用的进度标志，是能否用同一队连续刷一个材料本。',steps:[
- ['体力跟着卡点走','角色缺经验道具刷秘闻调查，潜能卡技能刷源点前哨，装备主词条不对刷熔断禁区。三者都在新服双倍名单。'],
+ ['体力跟着卡点走','角色缺经验道具刷秘闻调查，缺潜能材料刷源点前哨，装备主词条不对刷熔断禁区。三者都在新服双倍名单。'],
  ['挑一份过渡装备','输出先保暴击稳定与角色技能所需的属性；辅助先速度、生存，挂减益的再补效果命中。有好主词条就先穿，别为凑套装打乱配速。'],
  ['把体力花在能稳过的层','地狱难度在你自己的账号解锁后再试。解锁后先手动观察一次，再自动连打；掉人、断奶就降一层。'],
  ['给活动留一笔常驻券','11/10 起可以参加 EWS 投票。能推图的话，把非必要常驻抽取留到 11/12 的祈祝之礼。']],tasks:['稳定自动完成一组资源本','看过 Boss 的免疫/减伤说明','检查限时池的实际剩余天数'],next:'输出面板够却打不动时，去「副本配队」查先控、先驱散或先治疗。',refs:['s19','patch','run']},
- {name:'第 8–14 天',code:'D08—14',date:'11.12—18',title:'收齐赠送，搭出第二种打法',intro:'日期按 11 月 5 日创角推算。奖励取决于任务完成情况，各活动以游戏内倒计时为准。',steps:[
+ {name:'第 8–14 天',code:'D08—14',date:'11.12—18',title:'核对赠送进度，搭出第二种打法',intro:'日期按 11 月 5 日创角推算。奖励取决于任务完成情况，各活动以游戏内倒计时为准。',steps:[
  ['逐条核对 14 日任务','优先补瑞玛丽、宁芙涅的任务和培养计划中的专属晶格。专属材料给对应角色，通用完美晶格留给准备长期使用的关键技能。'],
  ['让新成员解决一个问题','瑞玛丽到手后先试群伤和追击；宁芙涅先给攻击型主攻挂加攻和护盾，或在控制本提供免疫。固定一队作对照，别一次换光成员和源器。'],
  ['顺路吃常驻积分','11/12 04:00 起，已攒且原打算用的常驻券可集中用。抽完预算就停，检查已经解锁的领奖档。'],
@@ -37,16 +37,16 @@ const stages=[
  ['每次只改一个变量','固定难度，记录输在第几波、哪名队员先倒、破防是否在爆发前。一次改速度、命中、生存或输出中的一项，再测试。']],tasks:['稳定自动一项高难副本','练好第一位对策角色','比较换装前后的稳定性'],next:'长期抽卡只为扩大副本覆盖，已有解法就保持储蓄。',refs:['run','newbie']}
 ];
 const pools=[
- ['逆翎 UP','需要增伤且保底够，再取一只','10 月低配号实录的优先辅助。逆羽增伤和破防都能给队伍其他输出使用。已有炼，之后还能领瑞玛丽，因此先提高全队爆发收益。','条件：预算能覆盖本池剩余目标保底，且现队确有功能缺口。没把握就先靠克洛斯；出了逆翎即停，不追重复。','s19 run rank'],
+ ['逆翎 UP','需要增伤且保底够，再取一只','10 月低配号实录的优先辅助。逆翎增伤和破防都能给队伍其他输出使用。已有炼，之后还能领瑞玛丽，因此先提高全队爆发收益。','条件：预算能覆盖本池剩余目标保底，且现队确有功能缺口。没把握就先靠克洛斯；出了逆翎即停，不追重复。','s19 run rank'],
  ['新手定向','先等缺口，再考虑芙蕾雅','若常用队已经有输出和治疗，但需要先手与全队节奏，芙蕾雅才是这个定向池的候选。先把手头免费召唤和任务奖励看一遍，别选已经能领的克洛斯或凌罗。','已有芙蕾雅／节奏辅助充足：先保留选择，看目标本缺口和池面清单；临近到期再补未拥有且会上阵的功能位。定向仍需召唤，以页面所需次数为准。','s19 rank run'],
  ['角色自选箱','若领到，按队伍缺口选','本服尚未承诺发这种箱。实际拿到再展开名单：单核已有伤害却缺再动，梨梨能补拉条、冷却与协战；已有同类辅助且能通关就先留箱。若缺单体爆发，莉拉姆是名单内才考虑的人选。','这只是见到该箱时的决策。S19 公告没有承诺第 2 天给箱，也没有公开完整名单；不要把国际服攻略中的领取日、名单当作新区保证。','s19 rank'],
- ['夜离 UP','缺群攻才考虑，不与逆翎连追','喜欢多段爆发和清波、已拥有逆翎，且没有合适群攻时，夜离首只可考虑。也可以优先夜离，用免费克洛斯先手铺垫。','代价是占用另一笔限定预算，而炼和后续瑞玛丽也能打群伤。零氪默认只锁一个 UP；先拿免费输出跑一次目标本，再决定是否补她。','s19 rank'],
+ ['夜离 UP','逆翎之后仍缺群攻，才开第二池','喜欢多段爆发和清波、已拥有逆翎，且没有合适群攻时，夜离首只可考虑。也可以优先夜离，用免费克洛斯先手铺垫。','代价是占用另一笔限定预算，而炼和后续瑞玛丽也能打群伤。先拿免费输出跑一次目标本；仍想立刻换群攻且夜离自己的保底够，再补首只，不能借用逆翎池的抽数。','s19 rank'],
  ['达罗斯限定','默认跳过','版本新卡偏承伤、复活与持续消耗。对本路线，凌罗先负责续航，首笔稀有票留给能放大主攻的角色。','专属公告确认：序章后开放，极相限定 80 抽内必得、出 SSR 即达罗斯。仅当你明确改玩防御长线且预算够时再考虑；不要为了原质突破奖励追复本。','dar patch'],
- ['常驻召唤','只花计划内的券','开服先用必要的免费券补人，队伍能推就停。11/12 起祈祝之礼仅统计常驻召唤，留给它的券到活动开始后再花。','活动自选跃格加密箱只有柯卡尔迪、魁洛、席琳丝三个选项，和新手定向、角色自选是不同物品。档位以客户端为准，不为箱子换券冲累计。','patch']
+ ['常驻召唤','11/12 起用计划内的券','开服先用必要的免费券补人，队伍能推就停。11/12 起祈祝之礼仅统计常驻召唤，留给它的券到活动开始后再花。','活动自选跃格加密箱只有柯卡尔迪、魁洛、席琳丝三个选项，和新手定向、角色自选是不同物品。档位以客户端为准，不为箱子换券冲累计。','patch']
 ];
 const events=[
  ['新区 · 14 天','两组送卡任务','优先','培养计划取克洛斯、凌罗与专属晶格；另一组 14 日系列任务取瑞玛丽、宁芙涅。逐条看任务，签到本身不等于领齐四人。','s19'],
- ['新区 · 14 天','签到、成长计划与特训营','优先','每日领签到的召唤道具。成长计划最高奖励档到 100 级，是长期目标；特训营前 14 天先做能顺手完成的任务，零氪不追排行。','s19'],
+ ['新区 · 14 天','签到、成长计划与特训营','优先','每日领签到的召唤道具。成长计划最高奖励档到 100 级，按本号活动期限和解锁进度完成；特训营前 14 天先做能顺手完成的任务，零氪不追排行。','s19'],
  ['新区 · 14 天','三项副本双倍','优先','秘闻调查（经验）、熔断禁区（源器）、源点前哨（潜能）按卡点花体力。凶影追缉是智壳本，不在这份双倍名单。','s19'],
  ['11/05 04:00 — 11/12 03:59','源器回收协议','顺手','服务器时间。只有符合条件的回收才有价格倍率。先锁速度、暴击、命中等有用胚子，再清理确定不用的装备。','patch'],
  ['11/10 04:00 — 12/23 03:59','EWS 总决赛投票','顺手','UTC+8。选赛区后每日在活动页投票拿决胜星徽，留意累计奖励。看得见入口就参与，不要求你去打 PvP。','patch'],
@@ -90,8 +90,10 @@ function summonRoadmap(owned){
  const future='葵诺丝是后期生命型输出的观察目标。上期 UP 已结束，复刻时间未定；先用免费瑞玛丽，到新池公布再对照实际要打的本。';
  return head('零氪 PvE：按时间决定抽谁','国服 S19 · 11/4 核对')+
  '<div class="book-intro"><p><strong>优先逆翎首只 → 能指定时拿梨梨 → 首领缺单体才补莉拉姆。</strong> 这是给「辅助铺垫、主攻收尾」的长期顺序。免费队能开荒，没有证据表明哪张限定是所有 PvE 的入场券。</p><a href="#draw/mine">按我已有的角色和余票调整 →</a><a href="#roster/teams">查看全部队伍与平替 →</a></div>'+
- '<article class="panel"><h3>三步决定下一笔资源</h3>'+rows.map(([when,name,body,scene,stage])=>'<div class="book-move"><small>'+when+'</small><h4>'+name+'</h4><p>'+body+'</p><a href="'+bookNav(scene,stage)+'">对照这一步的队伍 →</a></div>').join('')+
- '<p class="book-evidence">前两步依据：国服新号记录和两份源器本的角色、出手说明。排序是针对零氪 PvE 的建议，不是官方强度榜。</p>'+ref(['s19','run','newbie','rank'])+'</article>'+
+ '<article class="panel road-panel"><h3>三步决定下一笔资源</h3><ol class="road-list">'+rows.map(([when,name,body,scene,stage],i)=>{
+  const hero=['逆翎','梨梨','谛听'][i],pic=artEntry('people',hero);
+  return '<li><div class="road-who">'+(pic?'<img width="48" height="48" src="'+encodeText(pic.src)+'" alt="">':'')+'<div><small>'+when+'</small><h4>'+name+'</h4></div></div><p>'+body+'</p><a href="'+bookNav(scene,stage)+'">'+['看中期推图队','看梨梨在哪些源器本上场','看单体打手的首选与平替'][i]+' →</a></li>';
+ }).join('')+'</ol><details class="road-refs"><summary>这三步的依据</summary><p>国服新号实录和源器本的出手说明支持前两步。第三步是按卡点给出的培养建议。</p>'+ref(['s19','run','newbie','rank'])+'</details></article>'+
  '<article class="panel"><h3>有截止时间，哪些要改变顺序？</h3>'+
  '<div class="book-pull"><b>新人池还有时间、但小怪清不动 → 夜离是可选第二池</b><p>先把能用的输出装给炼。仍想立刻换群攻，且夜离自己的保底够，再拿首只；已有夜离或能等 14 日系列任务的瑞玛丽，就不为清波再抽。两张新人 UP 的关池时间按本号池面，不把 14 日任务期限当卡池期限。</p></div>'+
  '<p><b>培养计划与 14 日系列任务：</b>克洛斯、凌罗、瑞玛丽、宁芙涅走固定领取。新手定向的芙蕾雅只在缺全队先手时考虑；她与梨梨解决的问题不同。</p>'+
@@ -150,7 +152,8 @@ function render(){
  else{app.innerHTML=[dayOne,null,route,draw,roster,fight,cal,evidence,atlasView][idx](n,topic);const link=key==='draw'?'':fieldRelated(key,n);if(link)app.querySelector('.sectionhead')?.insertAdjacentHTML('afterend',link)}
  app.dataset.key=key;if(key!=='roster'||['0','1','2'].includes(part))illustratePage(key,n,part,topic);refreshProgress();
  flowAfterRender(key);
- document.title=tabs[idx][1]+' · 伊瑟 S19 开荒手册';
+ const heading=app.querySelector('h2')?.textContent||tabs[idx][1];
+ document.title=(key==='day1'?(page==='week'?'第 '+part+' 天':'第 1 天')+' · ':'')+heading+' · 伊瑟 S19 开荒手册';
 }
 app.addEventListener('click',e=>{const el=e.target.closest('[data-sub]');if(el)location.hash=app.dataset.key+'/'+el.dataset.sub});
 app.addEventListener('change',e=>{if(e.target.matches('[data-task]')){state['t'+e.target.dataset.task]=e.target.checked;save();refreshProgress()}});
@@ -162,9 +165,13 @@ window.addEventListener('hashchange',()=>{
  const previousY=history.state?.guideY;
  if(findDialog.open)findDialog.close();
  render();
+ if(!Number.isFinite(previousY)&&focusLinkedTeam())return;
  if(Number.isFinite(previousY))requestAnimationFrame(()=>window.scrollTo(0,previousY));
  else {const headingY=app.getBoundingClientRect().top+scrollY-nav.offsetHeight;if(scrollY>headingY)window.scrollTo(0,Math.max(0,headingY));}
  if(document.activeElement===document.body)app.focus({preventScroll:true});
 });
+document.querySelector('.skip-guide').addEventListener('click',()=>{app.focus({preventScroll:true});app.scrollIntoView({block:'start'});});
+document.querySelector('.return-top').addEventListener('click',()=>{document.querySelector('#nav a')?.focus({preventScroll:true});window.scrollTo(0,0);});
 if(!location.hash && state.lastChecklist)history.replaceState(null,'','#'+checklistLocation());
 render();
+requestAnimationFrame(focusLinkedTeam);
