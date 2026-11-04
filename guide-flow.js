@@ -64,7 +64,7 @@ function searchGuide(query){
  const catalogs=tabs.map(([k,title])=>row(title,'栏目',k));
  const pictures=['explore','maps'].flatMap((g,i)=>Object.keys(artSet(g)).map(key=>{const im=artEntry(g,key);return row(im.title,'图鉴','atlas/'+(i+1)+'/'+key,im.caption)}));
  const teamPages=Object.entries(bookScenes).map(([id,label])=>row(label+' · 队伍与平替','配队','roster/teams/'+id,label+' 获取方式 '+bookTips[id]));
- const results=[...teamPages,row('PvE 角色强度表','强度','roster/tiers','整体 角色强度 排行 节奏榜 前期 后期 抽卡 T0'),row('逆翎之后抽谁','抽卡','draw/next','第二目标 梨梨 莉拉姆 夜离 葵诺丝 复刻 中后期'),row('抽卡优先级与固定获取','抽卡','draw/mine','免费领取 赠送 抽取优先级 首抽 自选 培养计划 瑞玛丽 克洛斯 凌罗 宁芙涅'),row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
+ const results=[...teamPages,row('PvE 角色强度表','强度','roster/tiers','整体 角色强度 排行 节奏榜 前期 后期 抽卡 T0'),row('逆翎之后抽谁','抽卡','draw/next','第二目标 梨梨 莉拉姆 夜离 葵诺丝 复刻 中后期'),row('必要抽取顺序与时间表','抽卡','draw/order','什么时候抽 逆翎 梨梨 莉拉姆 第二池 高难 开服'),row('抽卡优先级与固定获取','抽卡','draw/mine','免费领取 赠送 抽取优先级 首抽 自选 培养计划 瑞玛丽 克洛斯 凌罗 宁芙涅'),row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
  const norm=s=>s.toLowerCase().replace(/\s+/g,'');
  const needle=norm(q);
  const byTitle=results.filter(r=>norm(r.title).includes(needle));

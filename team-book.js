@@ -41,7 +41,7 @@ function teamBook(requestedScene,requestedStage){
 
   return '<a href="'+bookNav(s,g)+'" '+(active?'aria-current="page"':'')+'>'+label+'</a>';
  }).join('');
- return head('按玩法找队伍','S19 / 阵容手册')+'<div class="book-intro"><p>先找你要打的内容。点开一队，就能看到谁先动、少了谁能换，以及每个人从哪里拿。</p><a href="#draw/mine">算我下一抽 →</a><a href="#roster/mine">勾选我的角色 →</a><a href="#roster/tiers">对比角色强度 →</a></div>'+
+ return head('按玩法找队伍','S19 / 阵容手册')+'<div class="book-intro"><p>先找你要打的内容。点开一队，就能看到谁先动、少了谁能换，以及每个人从哪里拿。</p><a href="#draw/order">先看必要抽取顺序 →</a><a href="#draw/mine">算我下一抽 →</a><a href="#roster/mine">勾选我的角色 →</a><a href="#roster/tiers">对比角色强度 →</a></div>'+
  '<section class="book-filter" aria-label="筛选队伍"><div><b>打什么</b><div class="book-chips">'+nav(bookScenes,true)+'</div></div><div><b>当前进度</b><div class="book-chips">'+nav(bookStages,false)+'</div></div></section>'+
  '<div class="book-heading"><h3>'+bookScenes[scene]+'</h3><span>'+bookStages[stage]+' · '+rows.length+' 项</span></div><p class="book-tip">'+bookTips[scene]+'</p>'+
  (rows.length>1?'<div class="book-index"><b>直接看</b>'+rows.map(t=>'<button type="button" data-show-team="'+encodeText(t.id)+'">'+encodeText(t.title)+'</button>').join('')+'</div>':'')+
