@@ -61,9 +61,9 @@ function teamOutcome(index,owned){
 }
 
 function ownedPullContents(owned){
- const goals=[['start','刚开荒，想决定首抽'],['waves','小怪清得慢，想现在补群攻'],['boss','清得掉小怪，首领打到超时'],['turns','主攻伤害够，下一轮大招太慢'],['future','暂时能打，想为后期存票']];
+ const goals=[['start','按我的角色排下一抽'],['waves','小怪清得慢，想现在补群攻'],['boss','清得掉小怪，首领打到超时'],['turns','主攻伤害够，下一轮大招太慢'],['future','暂时能打，想为后期存票']];
  const [,part,topic]=location.hash.split('/');
- const requested=location.hash.startsWith('#draw/')&&part==='next'?(topic||'turns'):state.pullGoal;
+ const requested=location.hash.startsWith('#draw/')&&part==='next'?(topic||(owned.has('逆翎')?'start':'turns')):state.pullGoal;
  const goal=goals.some(([id])=>id===requested)?requested:'start';
  const target=ownedPullPlan(owned,'unknown',goal).budgetTarget;
  const budget=state.pullBudgets?.[target]||'unknown';
@@ -74,9 +74,10 @@ function ownedPullContents(owned){
  const editor=onDraw?'<fieldset class="pull-owned"><legend>我已经有谁</legend>'+keyNames.map(name=>'<label><input type="checkbox" data-pull-hero="'+name+'" '+(owned.has(name)?'checked':'')+'> '+name+'</label>').join('')+'</fieldset>':'';
  const ownedNote=owned.size?'':'<p class="note">'+(unreviewedHeroes().length?'已记下的名字尚待核实。以下先显示新号示例。':'还没有勾选角色，以下是刚进新区的示例。')+'</p>';
  const chooser=target?select('box-budget',target+'池的票够拿到首只吗？',[['unknown','还没算'],['short','保底不够'],['covered','已核实，保底够']],budget,'data-budget-target="'+target+'"'):'';
+ const opportunities=plan.opportunities?'<section class="pull-options"><h4>现在手里的票怎么花</h4>'+plan.opportunities.map(item=>'<div><b>'+encodeText(item.label)+'</b><p>'+encodeText(item.text)+'</p>'+(item.goal?'<button type="button" data-pull-goal="'+item.goal+'">算夜离池的预算 →</button>':'')+'</div>').join('')+'</section>':'';
  return '<section class="pull-answer" aria-live="polite"><span class="label">'+(owned.size?'按已勾选的角色':'新号示例')+'</span><h3>'+plan.title+'</h3><p>'+plan.action+'</p>'+
-  '<h4>下一步</h4><p>'+plan.next+'</p></section>'+
-  select('pull-goal','按你眼下的问题重排',goals,goal)+editor+chooser+
+  '<h4>'+(plan.opportunities?'什么情况下换目标':'下一步')+'</h4><p>'+plan.next+'</p></section>'+
+  select('pull-goal','按你眼下的问题重排',goals,goal)+opportunities+editor+chooser+
   (!owned.size&&unreviewedHeroes().length?ownedNote:'')+
   '<details><summary>为什么这样排？看实战和获取条件</summary><p>'+plan.basis+'</p>'+roleRefs(plan.sources)+'</details>';
 }
@@ -131,6 +132,12 @@ document.addEventListener('change',event=>{
  }
 });
 document.addEventListener('click',event=>{
+ const pick=event.target.closest('[data-pull-goal]');
+ if(pick){
+  const select=document.getElementById('pull-goal');
+  select.value=pick.dataset.pullGoal;select.dispatchEvent(new Event('change',{bubbles:true}));
+  document.getElementById('box-budget')?.focus();return;
+ }
  const remove=event.target.closest('[data-remove-extra]');
  if(remove||event.target.closest('[data-add-extra]')){
   const input=document.getElementById('extra-hero'),status=document.getElementById('extra-status');
