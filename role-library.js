@@ -17,9 +17,9 @@ const briefDecisions={
  '缬草':'十月评价列入可培养的觉醒 SR。队里已有凌罗时，先检查关卡是否真的需要第二个保护位。',
  '卡奇':'10 月新号用普通卡奇推开局。能用现有练度通过就保留，在这个位置还没卡关前，先投入主攻。',
  '恶命':'10 月点评仅确认部分高难有用。没有近期同难度的固定阵容可照抄，先留着，不为娜娜专门提练。',
- '伯诺瓦':'10/02 拿鹤计分队的两位输出之一。作者面板为 229 速度、431% 暴击伤害。把这个练度留作成型参考。',
- '罗魍':'十月拿鹤计分实录用她与伯诺瓦一同输出。零氪首周先用拿得到的打手。',
- '多琪':'十月拿鹤实录的辅助。此处是己方英雄多琪，同名源器 Boss 的打法见副本页。',
+ '伯诺瓦':'10/02 国际服拿鹤计分队的两位输出之一。作者面板为 229 速度、431% 暴击伤害。把这个练度留作成型参考。',
+ '罗魍':'十月国际服拿鹤计分实录用她与伯诺瓦一同输出。零氪首周先用拿得到的打手。',
+ '多琪':'十月国际服拿鹤实录的辅助。此处是己方英雄多琪，同名源器 Boss 的打法见副本页。',
  '幻音千明':'十月新号起手四人之一。利用教程智壳先出手，给炼创造清场机会。',
  '格雷':'十月新号先用格雷，克洛斯到账后接替他的铺垫位。过渡时够上场就行。',
  '蝰蛇':'十月的多琪配队示意里有他。先确认技能能处理你当前层的机制，再投资命中和速度。',
@@ -58,16 +58,17 @@ function rankingOverview(){
  ];
  const opened=Array.isArray(state.rankOpen)?state.rankOpen:[Number(state.rankAuthor)||0];
  const cards=sections.map(([title,body,names,refs],i)=>'<details class="rank-author" data-author="'+i+'" '+(opened.includes(i)?'open':'')+'><summary>'+String(i+1).padStart(2,'0')+' · '+title+'</summary><div class="rank-author-body"><p>'+body+'</p>'+personFaces(names,title)+roleRefs(refs)+'</div></details>').join('');
- return '<p class="lead">国服 S19 · 11 月 4 日开服前校订。顺序按你作为零氪 PvE 新人的资源安排；角色页区分当期实测、技能说明和暂缓投资。</p><div class="related"><b>第一支队怎么站？</b><a href="#roster/scene/0">看 10 月新号的开局四人和换人顺序 →</a><a href="#roster/scene/7">后期 · 黑渊拿鹤五人队 →</a><a href="#roster/scene/9">觉醒谛听 · 双人速刷与替代 →</a></div><div class="rank-studies roster-ranks">'+cards+'</div>';
+ return '<p class="lead">国服 S19 · 11 月 4 日开服前校订。顺序按你作为零氪 PvE 新人的资源安排；角色页区分当期实测、技能说明和暂缓投资。</p><div class="related"><b>第一支队怎么站？</b><a href="#roster/scene/0">看 10 月新号的开局四人和换人顺序 →</a><a href="#roster/scene/7">后期 · 国际服拿鹤五人队 →</a><a href="#roster/scene/9">觉醒谛听 · 双人速刷与替代 →</a></div><div class="rank-studies roster-ranks">'+cards+'</div>';
 }
 function libraryPicker(kind,items,idx){
  const label=kind==='person'?'选择角色':'选择场景';
  return '<label class="note" for="roster-pick">'+label+' · 共 '+items.length+' 项</label><select class="choice" id="roster-pick" data-kind="'+kind+'">'+items.map((item,i)=>'<option value="'+i+'" '+(idx===i?'selected':'')+'>'+encodeText(item.name)+'</option>').join('')+'</select>';
 }
 function roleLibrary(section,topic){
- const kind=['mine','scene','person','rank'].includes(section)?section:'mine';
- const modes=[['mine','我的角色配队'],['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
+ const kind=['mine','scene','person','rank','tiers'].includes(section)?section:'mine';
+ const modes=[['mine','我的角色配队'],['tiers','PvE 强度表'],['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
  const links='<div class="libnav" aria-label="角色攻略">'+modes.map(([id,t])=>'<a href="#roster/'+id+'" '+(id===kind?'aria-current="page"':'')+'>'+t+'</a>').join('')+'</div>';
+ if(kind==='tiers')return head('PvE 角色强度表','国服 S19')+tierTable()+jump('draw','按我已有的角色决定下一抽')+jump('roster/mine','回到我的配队');
  let body='';
  if(kind==='mine')body=ownedPlanner(topic);
  else if(kind==='rank')body=rankingOverview();

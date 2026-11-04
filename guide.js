@@ -88,7 +88,7 @@ function draw(n){
   const pool=pools[n];
   return head(pool[0]+' · 池规则','02 / SUMMON')+'<p>'+jump('draw/mine','回到我的抽卡账单')+'</p>'+panel('','对应资源先查这里',pool[1],'<p>'+pool[2]+'</p><p class="stripe">'+pool[3]+'</p><details class="draw-detail"><summary>查看依据</summary>'+ref(pool[4].split(' '))+'</details>')+poolLinks;
  }
- return head('这笔资源给谁？','S19 / 零氪 PvE')+'<article class="panel box-pulls draw-current"><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>'+pullPriority()+poolRules;
+ return head('这笔资源给谁？','S19 / 零氪 PvE')+'<article class="panel box-pulls draw-current"><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>'+jump('roster/tiers','对比所有收录角色的前期、后期强度')+pullPriority()+poolRules;
 }
 const roleCats=['免费骨架','抽到再练','低星对策'];
 function roster(n){

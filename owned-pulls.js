@@ -4,7 +4,7 @@
   const official = ['S19 公告 · 固定赠送与新人召唤', 'https://www.taptap.cn/moment/866719390408642161?group_id=333480'];
   const run = ['LilyQAQ · 10/28 新号实录', 'https://www.taptap.cn/moment/864509086933189597?group_id=333480'];
   const review = ['璟璃 · 10/28 角色培养评价', 'https://www.taptap.cn/moment/814947599944516602?group_id=333480'];
-  const video = ['千里漫漫 · 10/02 黑渊拿鹤结算与面板', 'https://www.bilibili.com/video/BV1hjaU6BE5c/?t=187'];
+  const video = ['千里漫漫 · 10/02 国际服黑渊拿鹤结算与面板', 'https://www.bilibili.com/video/BV1hjaU6BE5c/?t=187'];
   const oldPool = ['官方 · 葵诺丝上一轮限时召唤日期', 'https://www.taptap.cn/moment/851171629613450759?group_id=333480'];
   function ownedPullPlan(owned, budget, goal = 'start') {
     const has = name => owned.has(name);
@@ -26,8 +26,8 @@
       return decision('单体输出优先看莉拉姆','能选莉拉姆的箱子到手后，再把名额给她。未见可指定她的入口时，晶钻先留着。','拿到后先试首领。单次伤害够、第二轮大招接不上，再补梨梨。','来自 10 月角色评价。没有本服次日送光暗箱的官方承诺，也没有她替换你的主攻后能快几回合的实测。',[review,official]);
     }
     if (goal==='turns') {
-      return has('梨梨') ? decision('用已有的梨梨，省下这次自选','把梨梨调到主攻前，优先拉主攻接第二轮技能。','已能顺利轮转时，存票等下一个明确卡点。','拿鹤实战里梨梨先于两名输出，成型号速度只作参考。',[video,review]) :
-        decision('下一位优先拿梨梨','能指定梨梨时优先拿首只。S19 尚未确认这样的自选箱或定向池，今天先存晶钻。','在能拿到她以前，先用教程的幻音千明拉条加攻。','10 月黑渊拿鹤的 5928 分队用了梨梨。配合 10 月培养评价，适合想让主攻多动的账号。',[video,review,official]);
+      return has('梨梨') ? decision('用已有的梨梨，省下这次自选','把梨梨调到主攻前，优先拉主攻接第二轮技能。','已能顺利轮转时，存票等下一个明确卡点。','国际服拿鹤实战里梨梨先于两名输出，成型号速度只作参考。',[video,review]) :
+        decision('下一位优先拿梨梨','能指定梨梨时优先拿首只。S19 尚未确认这样的自选箱或定向池，今天先存晶钻。','在能拿到她以前，先用教程的幻音千明拉条加攻。','10 月国际服拿鹤的 5928 分队用了梨梨。配合 10 月培养评价，适合想让主攻多动的账号。',[video,review,official]);
     }
     if (goal==='future') {
       return decision(has('葵诺丝')?'先养已有的葵诺丝':'留票关注葵诺丝',has('葵诺丝')?'让她做生命型输出，保留抽重复本体的资源。':'上一轮 UP 在 10 月 14 日结束。等官方公布可指定她的新池，再按当期表现决定。','现在先领任务瑞玛丽练群伤。后面有明确复刻日期，再给那个池单独算保底。','璟璃的 10 月培养评价把她与逆翎并列。缺两人同练度、同副本的替换实测。',[review,oldPool,official]);
