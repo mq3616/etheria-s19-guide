@@ -24,7 +24,7 @@ function illustratePage(key,n,part,topic){
  const m=(...keys)=>put('maps',keys,'游戏画面对照');
  const explore=()=>put('explore',Object.keys(window.exploreArt||{}).slice(0,1),'主线地图参考');
  if(key==='roster'){p([['炼','克洛斯','凌罗','瑞玛丽','宁芙涅'],['逆翎','梨梨','夜离','芙蕾雅','莉拉姆'],['谛听','卡奇','恶命']][n]);return}
- if(key==='draw'){if(!part)return;p([['逆翎'],['芙蕾雅','克洛斯'],['梨梨','莉拉姆'],['夜离'],['达罗斯'],[]][n]);return}
+ if(key==='draw'){if(!part||part==='next')return;p([['逆翎'],['芙蕾雅','克洛斯'],['梨梨','莉拉姆'],['夜离'],['达罗斯'],[]][n]);return}
  if(key==='fight'){m(...[['hub','forge'],['binghuo'],['nana'],['duoqi'],['aoluola'],['heyan','shalang']][n]);return}
  if(key==='route'){if(n===0)explore();else if(n===1)p(['炼','克洛斯','凌罗']);else if(n===2)m('hub');else if(n===3)p(['瑞玛丽','宁芙涅']);else m('forge');return}
  if(key!=='manual')return;

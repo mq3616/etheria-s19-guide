@@ -69,7 +69,8 @@ function ownedPullContents(owned){
  const chooser=target?'<label for="box-budget">按「'+encodeText(target)+'」池面核算</label><select class="choice" id="box-budget" data-budget-target="'+encodeText(target)+'">'+
   [['unknown','还没确认目标保底或可用票数'],['short','已确认，预算不够拿到目标'],['covered','已确认，预算足够拿到目标']].map(([key,title])=>'<option value="'+key+'" '+((budget||'unknown')===key?'selected':'')+'>'+title+'</option>').join('')+'</select>':'';
  return (document.getElementById('app') && location.hash.split('/')[0]!=='#draw'?jump('draw','看抽卡优先级和固定获取名单'):'')+'<h3>'+encodeText(plan.title)+'</h3>'+chooser+'<p class="stripe"><b>'+encodeText(plan.action)+'</b></p><p>'+encodeText(plan.reason)+'</p>'+
-  '<p><b>停手线</b>　'+encodeText(plan.stop)+'</p>'+
+  '<p><b>当前新人池的停手线</b>　'+encodeText(plan.stop)+'</p>'+
+  jump('draw/next','下一笔抽谁？看梨梨、莉拉姆和后期输出')+
   '<details><summary>其他池与本期依据</summary>'+ownedBulletList(plan.alternatives)+'<p class="note">按 11 月 4 日能核实的 S19 池子和近期国服 PvE 资料判断。缺少同练度横向实测时，只给适合补的位置。</p>'+roleRefs(plan.sources)+'</details>';
 }
 
