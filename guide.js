@@ -82,13 +82,14 @@ function pullPriority(){
 }
 function draw(n){
  const owned=selectedHeroes(),part=location.hash.split('/')[1];
+ if(!part)return teamBook('story','all');
  const poolLinks='<div class="draw-pool-links" aria-label="池规则">'+pools.map((p,i)=>'<a href="#draw/'+i+'" '+(part===String(i)?'aria-current="page"':'')+'>'+p[0]+'</a>').join('')+'</div>';
  const poolRules='<details class="draw-detail" id="draw-pools"><summary>查看各池规则与来源</summary>'+poolLinks+'</details>';
  if(/^[0-5]$/.test(part||'')){
   const pool=pools[n];
   return head(pool[0]+' · 池规则','02 / SUMMON')+'<p>'+jump('draw/mine','回到我的抽卡账单')+'</p>'+panel('','对应资源先查这里',pool[1],'<p>'+pool[2]+'</p><p class="stripe">'+pool[3]+'</p><details class="draw-detail"><summary>查看依据</summary>'+ref(pool[4].split(' '))+'</details>')+poolLinks;
  }
- return head('这笔资源给谁？','S19 / 零氪 PvE')+'<article class="panel box-pulls draw-current"><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>'+jump('roster/tiers','对比所有收录角色的前期、后期强度')+pullPriority()+poolRules;
+ return head('这笔资源给谁？','S19 / 零氪 PvE')+jump('roster/teams','按玩法查队员、平替和获取方式')+'<article class="panel box-pulls draw-current"><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>'+jump('roster/tiers','对比所有收录角色的前期、后期强度')+pullPriority()+poolRules;
 }
 const roleCats=['免费骨架','抽到再练','低星对策'];
 function roster(n){
@@ -106,14 +107,14 @@ function roster(n){
 }
 function fight(n){
  const [label,index]=fightRoutes[n],scene=allScenes()[index];
- return head('副本打法','04 / BOSS LAB')+sub(fightRoutes.map(([title])=>title),n)+grid(
+ return head('副本打法','04 / BOSS LAB')+jump('roster/teams/'+(['story','gear','shell','gear','gear','shell'][n]),'查看这个玩法的具体队伍与替位')+sub(fightRoutes.map(([title])=>title),n)+grid(
   panel('',label,encodeText(scene.name),'<p class="lead">'+encodeText(scene.goal)+'</p><p class="stripe">'+encodeText(scene.teamLabel)+'</p>'+
    step([['配置',encodeText(scene.team)],['实际打法',encodeText(scene.rotation)]])+jump('roster/mine/'+index,'按我已有的角色配这关')+jump('roster/scene/'+index,'看完整场景、换人和出处')+(n===5?jump('roster/scene/5','另看莎朗'):'')+roleRefs(scene.sources)),
   panel('tint','体力去向','按材料缺口刷',
    step([['秘闻调查 · 经验','先检查背包。只养一队时角色经验可能有余，缺多少再刷多少。'],['源点前哨 · 潜能','主力被潜能卡住时刷对应材料。'],['熔断禁区 · 源器','先拿能用的主词条，再提高层数。'],['凶影追缉 · 智壳','先完成任务，需要具体智壳再刷。新区三项双倍没有这一项。']])+ref(['s19','run'])));
 }
 const filters=['新区专属','顺手可做','限时抽卡','可以跳过'];
-function cal(n){const group=[[0,1,2],[3,4],[5,6],[7,8]][n];return head('活动日历','05 / CALENDAR')+sub(filters,n)+grid(panel('',filters[n]+'　/　11 月服表','活动与截止时间',group.map((id,i)=>{const e=events[id];return '<details '+(i===0?'open':'')+'><summary>'+e[1]+' <span class="tag">'+e[2]+'</span></summary><div class="code" style="margin-top:9px">'+e[0]+'</div><p>'+e[3]+'</p>'+ref([e[4]])+'</details>'}).join('')),panel('tint','CLOCK / 两种时间','别错过两个节点',step([['11/12 04:00　常驻积分开始','准备花的常驻券留到这时；新手专属池、极相限定抽数另算。'],['11/19 03:59　常驻积分截止','开服第 14 天是 11/18。签到、培养和特训营分别核对活动页，截止时刻不一律按零点推算。']])+'<p class="note">日期按北京时间规划。标「服务器时间」的活动遵照区服重置。此页为开服前已公布的排期，后续更新以官方为准。</p>'+ref(['s19','patch'])))}
+function cal(n){const group=[[0,1,2],[3,4],[5,6],[7,8]][n];return head('活动日历','05 / CALENDAR')+jump('roster/teams/event','查看活动队伍和参与条件')+sub(filters,n)+grid(panel('',filters[n]+'　/　11 月服表','活动与截止时间',group.map((id,i)=>{const e=events[id];return '<details '+(i===0?'open':'')+'><summary>'+e[1]+' <span class="tag">'+e[2]+'</span></summary><div class="code" style="margin-top:9px">'+e[0]+'</div><p>'+e[3]+'</p>'+ref([e[4]])+'</details>'}).join('')),panel('tint','CLOCK / 两种时间','别错过两个节点',step([['11/12 04:00　常驻积分开始','准备花的常驻券留到这时；新手专属池、极相限定抽数另算。'],['11/19 03:59　常驻积分截止','开服第 14 天是 11/18。签到、培养和特训营分别核对活动页，截止时刻不一律按零点推算。']])+'<p class="note">日期按北京时间规划。标「服务器时间」的活动遵照区服重置。此页为开服前已公布的排期，后续更新以官方为准。</p>'+ref(['s19','patch'])))}
 function evidence(){return head('资料与核对','06 / REFERENCES')+grid(panel('','PRIMARY SOURCES / 一手信息','已确认的规则','<p>开服时刻、赠送角色、UP 名单以及活动周期优先使用国服 S19 原公告。页面内的抽取优先级和体力安排是面向零氪 PvE 的规划建议。</p>'+ref(['s19','patch','dar'])+'<p class="stripe">开服要现场确认：夜离与逆翎的倒计时、各池保底和继承范围、光暗自选是否发放及其名单、各任务的逐日门槛。没有把旧服的总抽数当作新区承诺。</p>'),panel('tint','FIELD NOTES / 玩家实战','配队与版本差异','<p>11 月开服前以最近的新号通关和国服更新核对。图鉴保留带日期的旧截图用于认人、认入口。未见近期完整通关队的场景，只列原帖实测部分。</p>'+ref(['run','newbie','rank','nicole','awake'])))}
 function refreshProgress(){const inputs=[...app.querySelectorAll('[data-task]')];if(!inputs.length)return;let d=inputs.filter(x=>x.checked).length;document.getElementById('done').textContent='本阶段完成 '+d+' / '+inputs.length;document.getElementById('bar').style.width=(100*d/inputs.length)+'%'}
 function render(){

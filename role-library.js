@@ -65,10 +65,11 @@ function libraryPicker(kind,items,idx){
  return '<label class="note" for="roster-pick">'+label+' · 共 '+items.length+' 项</label><select class="choice" id="roster-pick" data-kind="'+kind+'">'+items.map((item,i)=>'<option value="'+i+'" '+(idx===i?'selected':'')+'>'+encodeText(item.name)+'</option>').join('')+'</select>';
 }
 function roleLibrary(section,topic){
+ if(!section||section==='teams')return teamBook(topic,location.hash.split('/')[3]);
  const kind=['mine','scene','person','rank','tiers'].includes(section)?section:'mine';
- const modes=[['mine','我的角色配队'],['tiers','PvE 强度表'],['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
+ const modes=[['teams','按玩法找队伍'],['mine','我的角色配队'],['tiers','PvE 强度表'],['rank','新区培养顺序'],['scene','按场景配队'],['person','逐个看角色'],['0','按职责速查']];
  const links='<div class="libnav" aria-label="角色攻略">'+modes.map(([id,t])=>'<a href="#roster/'+id+'" '+(id===kind?'aria-current="page"':'')+'>'+t+'</a>').join('')+'</div>';
- if(kind==='tiers')return head('PvE 角色强度表','国服 S19')+tierTable()+jump('draw','按我已有的角色决定下一抽')+jump('roster/mine','回到我的配队');
+ if(kind==='tiers')return head('PvE 角色强度表','国服 S19')+tierTable()+jump('draw/mine','按我已有的角色决定下一抽')+jump('roster/mine','回到我的配队');
  let body='';
  if(kind==='mine')body=ownedPlanner(topic);
  else if(kind==='rank')body=rankingOverview();
