@@ -63,7 +63,7 @@ function searchGuide(query){
  const poolsList=pools.map((p,i)=>row(p[0],'卡池','draw/'+i,p[1]));
  const catalogs=tabs.map(([k,title])=>row(title,'栏目',k));
  const pictures=['explore','maps'].flatMap((g,i)=>Object.keys(artSet(g)).map(key=>{const im=artEntry(g,key);return row(im.title,'图鉴','atlas/'+(i+1)+'/'+key,im.caption)}));
- const results=[row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
+ const results=[row('抽卡优先级与固定获取','抽卡','draw','免费领取 赠送 抽取优先级 首抽 自选 培养计划 瑞玛丽 克洛斯 凌罗 宁芙涅'),row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
  const norm=s=>s.toLowerCase().replace(/\s+/g,'');
  const needle=norm(q);
  const byTitle=results.filter(r=>norm(r.title).includes(needle));
