@@ -1,0 +1,25 @@
+/* Night field guide. Keep screenshots and character artwork in their original colors. */
+:root{
+  color-scheme:dark;
+  --paper:#10141b;--light:#191f28;--ink:#edf0f4;--dim:#b1bdca;--line:#414d5b;
+  --teal:#85ddc9;--red:#f5a395;--on-accent:#101a21;--tinted:#1b302f;--rule:#62717f
+}
+body{background-color:var(--paper)}
+.frame>header{background:radial-gradient(ellipse at 78% 66%,#1b292e 0%,transparent 57%)}
+.top,nav{border-color:var(--rule)}
+.radar #g path{stroke:#72888c}.radar #h path,.radar g[stroke="#a53326"]{stroke:var(--red)}
+.radar g[stroke="#506657"]{stroke:#8db1ad}.radar circle[fill="#a53326"]{fill:var(--red)}.radar text{fill:var(--dim)}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline-color:#9bf3e1;outline-offset:2px}
+#nav a[aria-current],#nav a[href="#manual"][aria-current],.sub button.active,.libnav a[aria-current],.week-switch a[aria-current],.atlas-pages a[aria-current],.art-zoom[aria-pressed=true]{background:var(--teal);color:var(--on-accent);border-color:var(--teal)}
+.tint,.topic-links a[aria-current],.related,.opening-meter{background:var(--tinted)}
+.tint{border-color:#47665f}
+.tag{background:#33313a;color:#e3d7cd}
+.checks input:checked+span{color:var(--dim)}.progress{border-color:var(--rule)}
+.choice,.find-dialog input{background:var(--paper);color:var(--ink);border-color:var(--rule)}
+.find-dialog input::placeholder{color:var(--dim);opacity:1}
+.field-section p{color:#c1cbd7}.rank-author{background:#151b23}
+.roster-face:hover,.roster-face:focus-visible{background:#24463e}
+.roster-face img,.face-empty,.person-no-art,.art-trigger,.art-modal.portrait-mode img{background:#28323d}
+.find-dialog::backdrop,.art-modal::backdrop{background:rgb(5 8 13 / .84)}
+.art-modal,.find-dialog{box-shadow:0 18px 70px #0008}
+::selection{background:#9be5d1;color:#10211b}
