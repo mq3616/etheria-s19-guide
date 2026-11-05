@@ -46,10 +46,10 @@ function pullOrderPage(){
  '<p>逆翎负责破防，梨梨能让主攻再出手。按你喜欢的爆发打法，先补一个打首领的单体主攻。莉拉姆在兵祸、奥洛拉等 8 个具体副本是 T0。</p>'+
  '<p class="pair-action"><strong>现在存极相原型和晶钻。</strong>等名单含莉拉姆的「极相·定向召唤」，或她自己的限定 UP。11 月 5 日还没查到下一期开池日期。能覆盖目标保底时拿首只就停。</p>'+
  '<p><b>手里已经有普通 SR 谛听？</b>先让梨梨拉他打兵祸、奥洛拉。如果能稳定过，把下一份定向留给<b>玄骊</b>，补持续输出和全队减冷却。若是队伍先倒，先练免费凌罗，仍站不住才把<b>艾莉尔</b>提前。</p><p>'+['逆翎','梨梨','莉拉姆'].map(skillProfileLink).join('　')+'</p></article>'+
- '<section class="pair-skip"><h3>这几个 T0 可以先跳过</h3><p><b>海因里希</b>只有兵祸一栏到 T0，已有逆翎能驱散。<b>莉露摩卡</b>只有多琪到 T0，先用任务瑞玛丽清场。<b>拂秋</b>只有莎朗本到 T0，等真卡在这关再考虑。</p><p>开服的夜离先让位给任务瑞玛丽；当前达罗斯池给承伤和复活，这份极相票继续留给输出。</p></section>'+
+ sbBudgetBox({showCalculator:true})+'<section class="pair-skip"><h3>这几个 T0 可以先跳过</h3><p><b>海因里希</b>只有兵祸一栏到 T0，已有逆翎能驱散。<b>莉露摩卡</b>只有多琪到 T0，先用任务瑞玛丽清场。<b>拂秋</b>只有莎朗本到 T0，等真卡在这关再考虑。</p><p>开服的夜离先让位给任务瑞玛丽；当前达罗斯池给承伤和复活，这份极相票继续留给输出。</p></section>'+
  '<details class="draw-detail" data-pair-priority><summary>查看剩余 '+groups.reduce((n,g)=>n+g.names.length,0)+' 个本体的抽取优先级</summary>'+groups.map(g=>'<section class="pair-band"><h4>'+encodeText(g.title)+'</h4><p>'+encodeText(g.reason)+'</p><div>'+g.names.map(catalogLink).join('　')+'</div></section>').join('')+'</details>'+
  '<details class="draw-detail"><summary>看排序依据和卡池日期</summary><p>这是按已有逆翎、梨梨的零氪账号做的取舍。10/20 玩家榜逐本评级，10/28 角色点评说明莉拉姆的单体用途。10/17 有梨梨配普通谛听的国服作业；暂无 S19 同装备换成莉拉姆的竞速对照。</p><p>玄骊在 11 栏里有 10 栏达到 T0 或 T0.5。葵诺丝在原表只有「高难」T0.5，但另一位作者看好她的长期输出，所以打黑渊时仍值得比较。9 月开过极相定向，11/4 更新确认当期极相限定为达罗斯。</p>'+pullLinks(['live','review','farm','sep','nov','s19'])+'</details>'+
- '<details class="draw-detail"><summary>查任务、全角色 T0 / T0.5 和保底计算器</summary>'+summonBoard('order')+'</details>'+pullTabs('order');
+ '<details class="draw-detail"><summary>查任务与全部 T0 / T0.5 角色</summary>'+summonBoard('order')+'</details>'+pullTabs('order');
 }
 function pullChannelPage(){
  return '<p class="lead">按你的账号核对领取页和召唤详情。「历史上有」与「本服确定能拿」分开写。先找固定奖励，再把票分给解决当前卡点的池。</p>'+pullChannels.channels.map(c=>'<details class="draw-detail"><summary>'+encodeText(c.title)+'</summary><p class="note">'+encodeText(c.when)+'</p>'+(c.names.length?'<p>'+c.names.map(catalogLink).join('　')+'</p>':'')+'<p>'+encodeText(c.rule)+'</p><p><b>你的操作：</b>'+encodeText(c.action)+'</p>'+pullLinks(c.names.includes('逆翎')?['s19','merge','faq']:c.source==='jun'?['launch','merge','jun','s19']:c.source==='s19'&&c.names.includes('炼')?['run','s19']:[c.source])+'</details>').join('');
