@@ -48,13 +48,19 @@
    return decision('长期预算：输出、保核、专项分别补',ownedLong.length?'你已经有这些长期/专项候选：'+ownedLong.join('、')+'。先看实际能覆盖哪些关卡，再比较缺的功能。':'把葵诺丝/玄骊的输出与轮转、艾莉尔/斐莫莉安的保核、莎朗的毒伤和黑渊专项角色分开比较。没有通用的“抽齐这几张就毕业”。','能指定目标时才比较本体价值；UP结束不等于无法常驻获取。最新角色和超限例外必须读收录表，未官宣的新池也不编复刻日期。','10月作者点评支持这些角色的不同用途，不构成所有人都要抽的绝对排名，也不证明当前每张都在同一池。',[review,initial,event]);
   }
   if(!has('逆翎'))return banner('逆翎',wave?'已拥有'+wave+'，群攻不作为第一缺口；逆翎补驱散与减益。免费克洛斯能帮你推进时，也可先保留预算。':'新人期先比较逆翎的驱散减益，主攻先用炼。已有其他强力输出/辅助也应勾全，才不会重复补同一职责。');
+  if(has('梨梨')){
+   const refs=[farm,review,official,['万魔法典 · 分本评级','https://docs.qq.com/sheet/DSGxZd05GYmNXa0pN?tab=7ptfa0']];
+   if(!has('莉拉姆')&&!single)return decision('下一张等莉拉姆','逆翎破防，梨梨给主攻再动。等能指定莉拉姆的极相定向或她自己的 UP，凑够目标保底拿首只。','已有能稳定过本的单体时改等玄骊；先倒人则先用免费凌罗。','11/5 未核到下一期莉拉姆日期。国服评级和角色点评支持这一单体用途。',refs);
+   if(!has('玄骊'))return decision('先试已有单体，打得过再等玄骊','先用'+single+'，让梨梨拉主攻打目标本。若能稳定通过，下一次包含玄骊的极相定向或角色 UP 再投入。','若仍缺单体且还没有莉拉姆，优先等莉拉姆；若先减员，先补免费凌罗。','这是按持有角色给出的资源取舍。不同首领的触发条件和装备仍需试打。',refs);
+   return decision('已有玄骊和单体，先存票','先让手里的主攻与梨梨过本；能推进就保留下一份定向预算。','需要生存时先试凌罗；准备打黑渊再选本期专项位。','按本号缺口留资源。',refs);
+  }
   const opportunities=[];
-  if(!has('梨梨'))opportunities.push({label:'先查领取页 · 梨梨/莉拉姆条件自选',text:box,goal:'turns',button:'按轮转缺口比较 →'});
+  opportunities.push({label:'先查领取页 · 梨梨/莉拉姆条件自选',text:box,goal:'turns',button:'按轮转缺口比较 →'});
   if(!wave)opportunities.push({label:'新手池换目标 · 夜离可选',text:'想立即补清波、且核对新手池换目标后的剩余保底仍够再抽；能等任务瑞玛丽则不抢这笔。',goal:'waves',button:'按夜离目标算预算 →'});
   opportunities.push({label:'中后期仍有抽取目标',text:'输出候选葵诺丝、玄骊；生存保核艾莉尔、斐莫莉安；持续伤害莎朗；黑渊/暗笼再看魁洛、桑提克、荼蘼、柯洛罗、伯诺瓦。先选下面要解决的卡点，不按名单依次追抽。',goal:'future',button:'看长期候选 →'});
   opportunities.push({label:'11/12–19 · 计划内常驻券',text:'祈祝之礼的积分箱含柯卡尔迪、魁洛、席琳丝；没有梨梨、莉拉姆。先看真实奖励档，不为凑档拿晶钻盲捞。',goal:'abyss',button:'看黑渊专项缺口 →'});
-  const title=!has('梨梨')?'逆翎已有：先查自选，再补实际缺口':'逆翎、梨梨已有：下一张按目标本选择';
-  return {...decision(title,'已勾到'+(wave?'群攻'+wave:'群攻未勾，教程炼领到后先用')+'；'+(single?'单体'+single:'首领输出尚需按当前卡点核对')+'；'+(sustain?'续航/保护'+sustain:'固定赠送凌罗先领')+'。主线能推时先别重复抽相同职责。',has('梨梨')?after:box+' 若主攻伤害够，优先比较梨梨的再动；伤害不足则先查已有单体。','按你的实际勾选和玩法选项给出候选；已结合国服实录、用途点评、历史协议和当前S19规则，未将任何来源未确认的卡写成正在UP。',[official,run,farm,review,selector,event]),opportunities};
+  const title='逆翎已有：先查自选，再补实际缺口';
+  return {...decision(title,'已勾到'+(wave?'群攻'+wave:'群攻未勾，教程炼领到后先用')+'；'+(single?'单体'+single:'首领输出尚需按当前卡点核对')+'；'+(sustain?'续航/保护'+sustain:'固定赠送凌罗先领')+'。主线能推时先别重复抽相同职责。',box+' 若主攻伤害够，优先比较梨梨的再动；伤害不足则先查已有单体。','按你的实际勾选和玩法选项给出候选；已结合国服实录、用途点评、历史协议和当前S19规则，未将任何来源未确认的卡写成正在UP。',[official,run,farm,review,selector,event]),opportunities};
  }
  root.ownedPullPlan=ownedPullPlan;
  if(typeof module!=='undefined'&&module.exports)module.exports=ownedPullPlan;

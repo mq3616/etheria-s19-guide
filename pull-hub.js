@@ -21,18 +21,35 @@ function pullAliases(n){return [...(pullRoster.aliases[n]||[]),...(nameVariation
 const knownPullNames=new Map(pullRoster.rows.flatMap(([k])=>[k,...pullAliases(k)].map(v=>[v,k])));
 function pullCanonical(n){return knownPullNames.get(n)||n}
 function catalogLink(name){return '<a href="#draw/catalog/'+encodeURIComponent(pullCanonical(name))+'">'+encodeText(name)+'</a>'}
-const pullRoutes=[
- ['开服推剧情','辅助铺好、主攻收尾','逆翎','新人 UP 里，喜欢先破防再爆发，新号优先考虑逆翎首只。只抽到夜离也能开局，先用克洛斯辅助。免费队能推进、保底不够，就不必硬追。','夜离','需要立刻补群攻且新手池选择夜离后预算仍够，才选她；能等任务瑞玛丽就省下这份票。',['s19','run']],
- ['刷源器','兵祸、奥洛拉','梨梨','已有谛听、破防后打得疼却差第二轮：梨梨给谛听再动。10 月两份副本打法都用到这个组合。先查第 2 天有没有自选，再决定是否花票。','谛听','普通 SR，抽到就练，和梨梨不是同一个自选名额。单体本身打不动，才考虑把可选名额给莉拉姆；目前没有两套同装备竞速对照。',['farm','jun','review']],
- ['中后期补输出','有指定机会才重排预算','葵诺丝','10 月国服培养点评把她和逆翎并列看好，但两人抢的不是同一个位置。缺生命型输出、又想投入黑渊或暗笼时，把她列进长期候选。','莉拉姆','若当前实际卡在单体首领，能指定莉拉姆时可优先解决眼前问题；群伤和单体都够，就不为榜上名字换人。葵诺丝上一期 UP 已结束。',['review','kui']],
- ['高难与黑渊','先定首领，再决定队员','莎朗','能吃持续伤害的首领才考虑毒队；免疫毒时换常规输出。缺续航先试免费凌罗，需要不同保护手段再查艾莉尔、斐莫莉安。','魁洛','黑渊有成队打算再查魁洛、桑提克、荼蘼、柯洛罗、伯诺瓦。11/12 起的常驻积分箱含魁洛，但不为凑档透支。专场用途不等于五个人都要抽。',['review','nov']],
- ['竞技场','只打 PvE 可以跳过','达罗斯','达罗斯是当期极相限定，有承伤和复活手段。缺的是输出、或者只想过剧情，不因新卡或斗技榜名次给他保底。','芙蕾雅','重视先手才考虑新手定向。RTA 选禁档位描述的是竞技环境，不能证明能让你的源器本更快。',['daros','s19','lance']]
+const pairPriority = [
+ {title:'先等莉拉姆', names:['莉拉姆'], reason:'最缺一个专打首领的输出。'},
+ {title:'已有可靠的单体输出，再等玄骊', names:['玄骊'], reason:'跨本持续输出，也能缩短全队技能冷却。'},
+ {title:'经常减员才提前拿', names:['艾莉尔','斐莫莉安'], reason:'治疗保护优先看艾莉尔。若主要输在控制和减益，再比较斐莫莉安。先试任务给的凌罗。'},
+ {title:'已有就练，有明确缺口再花票', names:['葵诺丝','玄骐','夜离','罗魍','莎朗','伯诺瓦','荼蘼','桑提克','魁洛','柯洛罗','克索司'], reason:'葵诺丝留作后期主攻候选。玄骐、夜离要看现有输出能否替代。莎朗看毒免，黑渊计分再考虑伯诺瓦、荼蘼、桑提克、魁洛、柯洛罗。'},
 ];
+function remainingPairGroups(){
+ const fixed=new Set(['逆翎','梨梨','幻音千明','克洛斯','凌罗','瑞玛丽','宁芙涅']);
+ const rows=summonTop.rows.filter(([name])=>!fixed.has(name)&&!name.endsWith('（觉醒）'));
+ const groups=pairPriority.map(item=>({...item}));
+ const named=new Set(groups.flatMap(item=>item.names));
+ const others=rows.filter(([name])=>!named.has(name));
+ const singleScene=others.filter(r=>r[2]==='SSR'&&r[3].length===1);
+ const specialists=new Set(singleScene.map(r=>r[0]));
+ groups.push({title:'暂缓专抽，打到对应本再看',names:others.filter(r=>r[2]==='SSR'&&!specialists.has(r[0])).map(r=>r[0]),reason:'先按正在打的首领选队。已有逆翎、梨梨时，这些位置还可以用已经领到或练好的队员。'});
+ groups.push({title:'只在一个评级栏进高档，先跳过',names:singleScene.map(r=>r[0]),reason:'点名字能查该本和票种。「高难」是原作者的综合栏。芙蕾雅用新手定向，席琳丝有积分箱机会，各按自己的渠道比较。'});
+ groups.push({title:'低稀有角色随票拿，不专抽',names:others.filter(r=>r[2]!=='SSR').map(r=>r[0]),reason:'尤其留意普通 SR 谛听，拿到就可让梨梨拉他刷兵祸、奥洛拉。觉醒投入看本体，另在完整榜查。'});
+ return groups;
+}
 function pullOrderPage(){
- return summonBoard('order')+ '<p>'+jump('draw/ranks','先比较兵祸、多琪、奥洛拉、高难的强卡')+'</p><p class="lead">先看手里的资源是哪一种：任务能领的先领，自选只比较箱内角色，晶钻才需要算当期保底。下面每条都是独立的队伍目标，不是从第一行依次抽到底。</p>'+
- '<p class="stripe"><b>梨梨和谛听先抽谁？</b> 有含梨梨的自选、已有能打伤害的主攻：优先梨梨。谛听是普通 SR，自然抽到就练，不用晶钻专门捞。两人可以一起上。</p>'+
- pullRoutes.map(([scene,tag,a,body,b,alt,keys],i)=>'<details class="draw-detail" '+(!i?'open':'')+'><summary>'+scene+' · '+tag+'</summary><p><b>'+catalogLink(a)+'</b>　'+body+'</p><p><b>'+catalogLink(b)+'</b>　'+alt+'</p>'+pullLinks(keys)+'</details>').join('')+
- '<p>'+jump('draw/channels','按日期核对赠送、自选、UP 与保底')+jump('roster/teams','看队伍、替补与出手顺序')+'</p>';
+ const groups=remainingPairGroups();
+ return '<article class="pair-plan"><h3>下一张，等莉拉姆</h3>'+
+ '<p>逆翎负责破防，梨梨能让主攻再出手。按你喜欢的爆发打法，先补一个打首领的单体主攻。莉拉姆在兵祸、奥洛拉等 8 个具体副本是 T0。</p>'+
+ '<p class="pair-action"><strong>现在存极相原型和晶钻。</strong>等名单含莉拉姆的「极相·定向召唤」，或她自己的限定 UP。11 月 5 日还没查到下一期开池日期。能覆盖目标保底时拿首只就停。</p>'+
+ '<p><b>手里已经有普通 SR 谛听？</b>先让梨梨拉他打兵祸、奥洛拉。如果能稳定过，把下一份定向留给<b>玄骊</b>，补持续输出和全队减冷却。若是队伍先倒，先练免费凌罗，仍站不住才把<b>艾莉尔</b>提前。</p></article>'+
+ '<section class="pair-skip"><h3>这几个 T0 可以先跳过</h3><p><b>海因里希</b>只有兵祸一栏到 T0，已有逆翎能驱散。<b>莉露摩卡</b>只有多琪到 T0，先用任务瑞玛丽清场。<b>拂秋</b>只有莎朗本到 T0，等真卡在这关再考虑。</p><p>开服的夜离先让位给任务瑞玛丽；当前达罗斯池给承伤和复活，这份极相票继续留给输出。</p></section>'+
+ '<details class="draw-detail" data-pair-priority><summary>查看剩余 '+groups.reduce((n,g)=>n+g.names.length,0)+' 个本体的抽取优先级</summary>'+groups.map(g=>'<section class="pair-band"><h4>'+encodeText(g.title)+'</h4><p>'+encodeText(g.reason)+'</p><div>'+g.names.map(catalogLink).join('　')+'</div></section>').join('')+'</details>'+
+ '<details class="draw-detail"><summary>看排序依据和卡池日期</summary><p>这是按已有逆翎、梨梨的零氪账号做的取舍。10/20 玩家榜逐本评级，10/28 角色点评说明莉拉姆的单体用途。10/17 有梨梨配普通谛听的国服作业；暂无 S19 同装备换成莉拉姆的竞速对照。</p><p>玄骊在 11 栏里有 10 栏达到 T0 或 T0.5。葵诺丝在原表只有「高难」T0.5，但另一位作者看好她的长期输出，所以打黑渊时仍值得比较。9 月开过极相定向，11/4 更新确认当期极相限定为达罗斯。</p>'+pullLinks(['live','review','farm','sep','nov','s19'])+'</details>'+
+ '<details class="draw-detail"><summary>查任务、全角色 T0 / T0.5 和保底计算器</summary>'+summonBoard('order')+'</details>'+pullTabs('order');
 }
 function pullChannelPage(){
  return '<p class="lead">按你的账号核对领取页和召唤详情。「历史上有」与「本服确定能拿」分开写。先找固定奖励，再把票分给解决当前卡点的池。</p>'+pullChannels.channels.map(c=>'<details class="draw-detail"><summary>'+encodeText(c.title)+'</summary><p class="note">'+encodeText(c.when)+'</p>'+(c.names.length?'<p>'+c.names.map(catalogLink).join('　')+'</p>':'')+'<p>'+encodeText(c.rule)+'</p><p><b>你的操作：</b>'+encodeText(c.action)+'</p>'+pullLinks(c.names.includes('逆翎')?['s19','merge','faq']:c.source==='jun'?['launch','merge','jun','s19']:c.source==='s19'&&c.names.includes('炼')?['run','s19']:[c.source])+'</details>').join('');
@@ -68,6 +85,7 @@ function pullCatalogPage(){
 
 function pullHub(key){
  const title={order:'零氪 PvE：下一笔资源给谁',channels:'哪些角色能领、能选、能定向',catalog:'国服角色与抽取索引',basis:'抽卡建议用了哪些资料',ranks:'按副本查 PvE 节奏榜'}[key];
+ if(key==='order')return head('已有逆翎和梨梨，接下来抽谁','零氪 PvE · 11/5 核对')+pullOrderPage();
  return head(title,'S19 / 2026.11.05 核对')+pullTabs(key)+({order:pullOrderPage,channels:pullChannelPage,catalog:pullCatalogPage,basis:pullBasisPage,ranks:()=>summonBoard('ranks')}[key])();
 }
 document.addEventListener('input',e=>{if(e.target.id==='pull-find'){pullQ=e.target.value;pullPg=0;document.querySelector('#pull-list').innerHTML=pullCatalogRows()}});
