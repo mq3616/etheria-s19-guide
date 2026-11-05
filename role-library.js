@@ -30,13 +30,16 @@ const briefDecisions={
 function allScenes(){return [starterScene,...window.sceneRanks]}
 function rosterPeople(){
  const profiles=new Map([...window.coreProfiles,...window.strongProfiles,...(window.currentHeroes||[])].map(p=>[p.name,p]));
+ const catalog=new Map((window.pullRoster?.rows||[]).map(row=>[row[0],row]));
  const names=new Set([...originalPeople,...profiles.keys(),...allScenes().flatMap(s=>s.verifiedTeam||[])]);
+ const oldNames=new Set([...names].map(pullCanonical));for(const name of catalog.keys())if(!oldNames.has(name))names.add(name);
  return [...names].map(name=>{
   if(profiles.has(name))return profiles.get(name);
   const scenes=allScenes().filter(scene=>scene.verifiedTeam?.includes(name));
-  const sources=scenes.length?scenes[0].sources:briefDecisions[name]?[octoberReview]:[];
-  return {name,role:'角色速查',brief:true,sources,
-   priority:briefDecisions[name]||'尚缺近期国服 PvE 培养依据。先用现有练度试本，暂缓通用晶格。'};
+  const row=catalog.get(pullCanonical(name));
+  const sources=scenes.length?scenes[0].sources:briefDecisions[name]?[octoberReview]:row?[].concat(row[4]).map(k=>pullRoster.sources[k]).filter(Boolean):[];
+  return {name,role:row?.[1]||'角色速查',brief:true,sources,
+   priority:briefDecisions[name]||row?.[3]||'尚缺近期国服 PvE 培养依据。先用现有练度试本，暂缓通用晶格。'};
  });
 }
 function personFaces(names,label){
@@ -52,7 +55,7 @@ function personFaces(names,label){
 function rankingOverview(){
  const sections=[
   ['先养谁','进剧情先用炼，拿到克洛斯就替下格雷，缺续航再上凌罗。三人有专属培养资源。零氪把第一套能用的输出装交给炼，资源不足时先练这一队。',['炼','克洛斯','凌罗'],[octoberRun,serverDetails]],
-  ['第一笔限定给谁','喜欢辅助铺垫、主攻收尾，先考虑逆翎首只。10 月低配新号用她一路打到 80 级，近期作者也认可她的泛用性。预算不够保底就继续用克洛斯。夜离补群伤，已有清场位就跳过她这一池。逆翎到手后，下一次可指定机会优先看梨梨；若首领缺单体，先用已有谛听，再决定是否补莉拉姆。',['逆翎','梨梨','夜离','瑞玛丽'],[octoberRun,octoberReview,serverDetails]],
+  ['第一笔限定给谁','喜欢辅助铺垫、主攻收尾，先考虑逆翎首只。10 月低配新号用她一路打到 80 级，近期作者也认可她的泛用性。预算不够保底就继续用克洛斯。夜离补群伤，已有清场位就跳过她这一池。逆翎之后按副本选：兵祸、奥洛拉可用梨梨拉谛听；生存不足先试凌罗，再比较艾莉尔、斐莫莉安。首领缺单体才看莉拉姆。',['逆翎','梨梨','夜离','瑞玛丽'],[octoberRun,octoberReview,serverDetails]],
   ['已经出了更强的输出，换哪一格','已有葵诺丝，优先在输出位与炼对照，特别是之后要打黑渊或暗笼时。她不承担逆翎的辅助职责。缺的是单体爆发才看莉拉姆；遇到能吃持续伤害的目标，才另试莎朗。两者都不用为推普通剧情另开一队。',['葵诺丝','莉拉姆','莎朗'],[octoberReview]],
   ['新卡和觉醒，哪些现在用','十月的什炎限定在 11/4 结束；S19 次日开服，首抽不围绕他组队。旭光妮璐到手再看增伤位。普通 SR 谛听在 9 月新增觉醒，须到 80 级且全技能满，比较首周阵容时按未觉醒算。达罗斯是承伤与复活位。你这条爆发路线先用免费的凌罗稳血，把限定预算留给实际缺口。',['什炎','旭光妮璐','谛听','达罗斯','闪萝','荼蘼'],[src.octpatch,src.awake,src.dar,src.nicole]]
  ];

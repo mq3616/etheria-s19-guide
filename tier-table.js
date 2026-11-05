@@ -13,7 +13,7 @@ function tierSortKey(){
 }
 function tierTable(){
  const total = window.tierMain.length + window.tierMore.length;
- return '<section class="tier-panel" aria-label="PvE 角色强度表"><p class="tier-intro">前期看新号推图和刷本，后期看成型后打觉醒、黑渊等高难本。共收录 '+total+' 位，分档综合实录和玩家评价，跨服样本单独标明。核对至 2026 年 11 月 4 日。</p>'+
+ return '<section class="tier-panel" aria-label="PvE 角色强度表"><p class="tier-intro">前期看新号推图和刷本，后期看成型后打觉醒、黑渊等高难本。本页是本站对 '+total+' 位角色的场景分档，并非全角色官方榜。<a href="#draw/catalog">查完整角色索引及未定级角色</a>，<a href="#draw/basis">看 TapTap 榜单原文与适用版本</a>。分档综合实录和玩家评价，跨服样本单独标明。核对至 2026 年 11 月 4 日。</p>'+
   '<p class="tier-key"><b>S</b> 优先核心　<b>A</b> 强力或专本主力　<b>B</b> 过渡或对策　<b>?</b> 近期依据不足</p>'+
   '<label class="tier-search">找角色 <input id="tier-search" type="search" placeholder="输入角色名" value="'+encodeText(tierQuery)+'"></label>'+
   '<span class="note">点列名排序，点角色展开用途和出处；可同时展开多人对比。</span><div id="tier-results">'+tierRows()+'</div></section>';

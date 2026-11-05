@@ -76,7 +76,7 @@ function searchGuide(query){
  const q=query.trim().toLowerCase();
  const row=(title,type,route,words='')=>({title,type,route,words});
  const days=[row('第 1 天 · 进服与首抽','清单','day1','首日抽卡资源'),...weekDays.map(d=>row('第 '+d.day+' 天 · '+d.title,'清单','week/'+d.day,d.focus))];
- const people=rosterPeople().map((p,i)=>row(p.name,'角色','roster/person/'+i,[p.role,p.alias].filter(Boolean).join(' ')));
+ const people=rosterPeople().map((p,i)=>row(p.name,'角色','roster/person/'+i,[p.role,p.alias,...pullAliases(pullCanonical(p.name))].filter(Boolean).join(' ')));
  const scenes=allScenes().map((s,i)=>row(s.name,'阵容','roster/scene/'+i,s.goal));
  const notes=guideGroups.flatMap(([kind,label,get])=>get().map((v,i)=>row(v.title,label,'manual/'+kind+'/'+i)));
  const poolsList=pools.map((p,i)=>row(p[0],'卡池','draw/'+i,p[1]));
@@ -84,7 +84,7 @@ function searchGuide(query){
  const pictures=['explore','maps'].flatMap((g,i)=>Object.keys(artSet(g)).map(key=>{const im=artEntry(g,key);return row(im.title,'图鉴','atlas/'+(i+1)+'/'+key,im.caption)}));
  const concreteTeams=bookTeams().map(t=>row(t.title,'队伍','roster/teams/'+t.scene+'/'+t.stage+'/'+t.id,[t.when,t.slots.map(s=>s.slice(1,3).join(' ')).join(' ')].join(' ')));
  const teamPages=Object.entries(bookScenes).map(([id,label])=>row(label+' · 队伍与平替','配队','roster/teams/'+id,label+' 获取方式 '+bookTips[id]));
- const results=[...concreteTeams,...teamPages,row('PvE 角色强度表','强度','roster/tiers','整体 角色强度 排行 节奏榜 前期 后期 抽卡 T0'),row('逆翎之后抽谁','抽卡','draw/next','第二目标 梨梨 莉拉姆 夜离 葵诺丝 复刻 中后期'),row('必要抽取顺序与时间表','抽卡','draw/order','什么时候抽 逆翎 梨梨 莉拉姆 第二池 高难 开服'),row('抽卡优先级与固定获取','抽卡','draw/mine','免费领取 赠送 抽取优先级 首抽 自选 培养计划 瑞玛丽 克洛斯 凌罗 宁芙涅'),row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
+ const results=[...concreteTeams,...teamPages,row('按副本查节奏榜','抽卡','draw/ranks','原表 实战 兵祸 多琪 奥洛拉 高难'),row('卡池与自选时间表','抽卡','draw/channels','固定赠送 盛典之邀 极相自选'),row('国服角色抽取索引','抽卡','draw/catalog','全部 名册 图鉴'),row('TapTap 榜单出处','资料','draw/basis','节奏榜 来源'),row('PvE 角色强度表','强度','roster/tiers','整体 角色强度 排行 节奏榜 前期 后期 抽卡 T0'),row('逆翎之后抽谁','抽卡','draw/next','第二目标 梨梨 莉拉姆 夜离 葵诺丝 复刻 中后期'),row('必要抽取顺序与时间表','抽卡','draw/order','什么时候抽 逆翎 梨梨 莉拉姆 第二池 高难 开服'),row('抽卡优先级与固定获取','抽卡','draw/mine','免费领取 赠送 抽取优先级 首抽 自选 培养计划 瑞玛丽 克洛斯 凌罗 宁芙涅'),row('我的角色配队','工具','roster/mine','已抽 持有 抽卡 推荐 谁先动'),...people,...scenes,...days,...poolsList,...pictures,...notes,...catalogs];
  const norm=s=>s.toLowerCase().replace(/逆鳞/g,'逆翎').replace(/利拉姆/g,'莉拉姆').replace(/绫罗/g,'凌罗').replace(/瑞马丽/g,'瑞玛丽').replace(/奥罗拉/g,'奥洛拉').replace(/符文/g,'源器').replace(/\s+/g,'');
  const needle=norm(q);
  const byTitle=results.filter(r=>norm(r.title).includes(needle)).sort((a,b)=>Number(norm(b.title)===needle)-Number(norm(a.title)===needle));

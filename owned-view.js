@@ -61,7 +61,7 @@ function teamOutcome(index,owned){
 }
 
 function ownedPullContents(owned){
- const goals=[['start','按我的角色排下一抽'],['waves','小怪清得慢，想现在补群攻'],['boss','清得掉小怪，首领打到超时'],['turns','主攻伤害够，下一轮大招太慢'],['future','暂时能打，想为后期存票']];
+ const goals=[['start','按我的角色排下一抽'],['waves','小怪清得慢，想现在补群攻'],['boss','清得掉小怪，首领打到超时'],['turns','主攻伤害够，下一轮大招太慢'],['survive','会减员，缺治疗/净化/保护'],['abyss','要打黑渊/暗笼，补专项角色'],['mechanics','卡在持续伤害/控制等机制'],['future','暂时能打，比较中后期候选']];
  const [,part,topic]=location.hash.split('/');
  const requested=location.hash.startsWith('#draw/')&&part==='next'?(topic||(owned.has('逆翎')?'start':'turns')):state.pullGoal;
  const goal=goals.some(([id])=>id===requested)?requested:'start';
@@ -70,14 +70,14 @@ function ownedPullContents(owned){
  const plan=ownedPullPlan(owned,budget,goal);
  const select=(id,label,choices,selected,attrs='')=>'<label for="'+id+'">'+label+'</label><select class="choice" id="'+id+'" '+attrs+'>'+choices.map(([key,title])=>'<option value="'+key+'" '+(selected===key?'selected':'')+'>'+title+'</option>').join('')+'</select>';
  const onDraw=location.hash.split('/')[0]==='#draw';
- const keyNames=['逆翎','夜离','梨梨','莉拉姆','瑞玛丽','谛听','葵诺丝','闪萝'];
+ const keyNames=['逆翎','夜离','梨梨','莉拉姆','瑞玛丽','谛听','葵诺丝','玄骊','莎朗','艾莉尔','斐莫莉安','魁洛'];
  const editor=onDraw?'<fieldset class="pull-owned"><legend>我已经有谁</legend>'+keyNames.map(name=>'<label><input type="checkbox" data-pull-hero="'+name+'" '+(owned.has(name)?'checked':'')+'> '+name+'</label>').join('')+'</fieldset>':'';
  const ownedNote=owned.size?'':'<p class="note">'+(unreviewedHeroes().length?'已记下的名字尚待核实。以下先显示新号示例。':'还没有勾选角色，以下是刚进新区的示例。')+'</p>';
  const chooser=target?select('box-budget',target+'池的票够拿到首只吗？',[['unknown','还没算'],['short','保底不够'],['covered','已核实，保底够']],budget,'data-budget-target="'+target+'"'):'';
- const opportunities=plan.opportunities?'<section class="pull-options"><h4>现在手里的票怎么花</h4>'+plan.opportunities.map(item=>'<div><b>'+encodeText(item.label)+'</b><p>'+encodeText(item.text)+'</p>'+(item.goal?'<button type="button" data-pull-goal="'+item.goal+'">算夜离池的预算 →</button>':'')+'</div>').join('')+'</section>':'';
+ const opportunities=plan.opportunities?'<section class="pull-options"><h4>现在手里的票怎么花</h4>'+plan.opportunities.map(item=>'<div><b>'+encodeText(item.label)+'</b><p>'+encodeText(item.text)+'</p>'+(item.goal?'<button type="button" data-pull-goal="'+item.goal+'">'+encodeText(item.button||'查看这个缺口 →')+'</button>':'')+'</div>').join('')+'</section>':'';
  return '<section class="pull-answer" aria-live="polite"><span class="label">'+(owned.size?'按已勾选的角色':'新号示例')+'</span><h3>'+plan.title+'</h3><p>'+plan.action+'</p>'+
   '<h4>'+(plan.opportunities?'什么情况下换目标':'下一步')+'</h4><p>'+plan.next+'</p></section>'+
-  select('pull-goal','按你眼下的问题重排',goals,goal)+opportunities+editor+chooser+
+  select('pull-goal','这次要解决什么问题',goals,goal)+opportunities+editor+(onDraw?jump('roster/mine','勾全其他角色，避免重复补位'):'')+chooser+
   (!owned.size&&unreviewedHeroes().length?ownedNote:'')+
   '<details data-pull-basis><summary>为什么这样排？看实战和获取条件</summary><p>'+plan.basis+'</p>'+roleRefs(plan.sources)+'</details>';
 }
@@ -85,7 +85,7 @@ function ownedPullContents(owned){
 function ownedPlanner(topic){
  const index=savedScene(topic??state.boxScene),owned=selectedHeroes();
  const options=allScenes().map((scene,i)=>'<option value="'+i+'" '+(i===index?'selected':'')+'>'+encodeText(scene.name)+'</option>').join('');
- return '<article class="panel box-workbench"><div class="label">国服 S19 · 2026/11/04</div><h3>我的角色，怎么上场？</h3>'+
+ return '<article class="panel box-workbench"><div class="label">国服 S19 · 2026/11/05</div><h3>我的角色，怎么上场？</h3>'+
   ownedEditor(owned)+'<section id="box-results" tabindex="-1"><label for="box-scene">这次准备打哪里</label><select id="box-scene" class="choice">'+options+'</select>'+
   '<div id="box-team">'+teamOutcome(index,owned)+'</div></section></article>'+
   '<article class="panel box-pulls"><div class="label">按当前名单 · 零氪 PvE 抽卡</div><div class="box-pull-content">'+ownedPullContents(owned)+'</div></article>';
