@@ -11,11 +11,11 @@ const bookAlso={ 'binghuo-gear':{stages:['late']}, 'aoluola-gear':{stages:['late
 const bookDimensions=t=>({stages:[t.stage,...(bookAlso[t.id]?.stages||[])],scenes:[t.scene,...(bookAlso[t.id]?.scenes||[])]});
 function bookNav(scene,stage){return '#roster/teams/'+scene+(stage==='all'?'':'/'+stage)}
 function bookHero(name,owned){
- const e=encodeText,access=window.teamAccess?.[name]||['获取待核','S19 的固定来源和定向池尚未核实，先用已有角色。',''];
+ const e=encodeText,known=window.summonAccess?.[pullCanonical(name)],access=known?[known.title,'看任务、可用票种与来源','#draw/catalog/'+encodeURIComponent(pullCanonical(name))]:window.teamAccess?.[name]||['获取待核','S19 的固定来源和定向池尚未核实，先用已有角色。',''];
  const im=artEntry('people',name),route=personRoute(name);
  return '<div class="book-hero">'+(im?'<img loading="lazy" width="38" height="38" alt="" src="'+e(im.src)+'">':'')+'<div>'+
  (route?'<a class="book-name" href="#'+e(route)+'">'+e(name)+'</a>':'<strong class="book-name">'+e(name)+'</strong>')+(owned.has(name)?'<span class="book-owned">已有</span>':'')+
- '<div class="book-access">'+(access[2]?'<a href="'+e(access[2])+'" target="_blank" rel="noopener">'+e(access[0])+' ↗</a>':'<b>'+e(access[0])+'</b>')+' · '+e(access[1])+'</div></div></div>';
+ '<div class="book-access">'+(access[2]?'<a href="'+e(access[2])+'" '+(known?'':'target="_blank" rel="noopener"')+'>'+e(access[0])+(known?' →':' ↗')+'</a>':'<b>'+e(access[0])+'</b>')+' · '+e(access[1])+'</div></div></div>';
 }
 function bookCard(t,index,owned){
  const e=encodeText,open=(t.id===location.hash.split('/')[4]|| (bookOpen.get(t.id)??index===0));

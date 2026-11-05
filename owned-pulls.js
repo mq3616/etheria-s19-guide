@@ -50,7 +50,7 @@
   if(!has('逆翎'))return banner('逆翎',wave?'已拥有'+wave+'，群攻不作为第一缺口；逆翎补驱散与减益。免费克洛斯能帮你推进时，也可先保留预算。':'新人期先比较逆翎的驱散减益，主攻先用炼。已有其他强力输出/辅助也应勾全，才不会重复补同一职责。');
   const opportunities=[];
   if(!has('梨梨'))opportunities.push({label:'先查领取页 · 梨梨/莉拉姆条件自选',text:box,goal:'turns',button:'按轮转缺口比较 →'});
-  if(!wave)opportunities.push({label:'新人另一池 · 夜离可选',text:'想立即补清波、且夜离自己的保底够再抽；能等任务瑞玛丽则不抢这笔。',goal:'waves',button:'单独算夜离池 →'});
+  if(!wave)opportunities.push({label:'新手池换目标 · 夜离可选',text:'想立即补清波、且核对新手池换目标后的剩余保底仍够再抽；能等任务瑞玛丽则不抢这笔。',goal:'waves',button:'按夜离目标算预算 →'});
   opportunities.push({label:'中后期仍有抽取目标',text:'输出候选葵诺丝、玄骊；生存保核艾莉尔、斐莫莉安；持续伤害莎朗；黑渊/暗笼再看魁洛、桑提克、荼蘼、柯洛罗、伯诺瓦。先选下面要解决的卡点，不按名单依次追抽。',goal:'future',button:'看长期候选 →'});
   opportunities.push({label:'11/12–19 · 计划内常驻券',text:'祈祝之礼的积分箱含柯卡尔迪、魁洛、席琳丝；没有梨梨、莉拉姆。先看真实奖励档，不为凑档拿晶钻盲捞。',goal:'abyss',button:'看黑渊专项缺口 →'});
   const title=!has('梨梨')?'逆翎已有：先查自选，再补实际缺口':'逆翎、梨梨已有：下一张按目标本选择';
