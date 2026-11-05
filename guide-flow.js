@@ -27,9 +27,9 @@ function guideIcon(name){
 }
 function guideNav(key){
  const primary=['day1','draw','roster'];
- const labels={day1:'首周清单',draw:'抽卡顺序',roster:'角色配队'};
+ const labels={day1:'新区开荒',draw:'抽卡顺序',roster:'角色配队'};
  function link([id,text]){
-  const href=id==='day1'?checklistLocation():id==='draw'?'draw/order':id;
+  const href=id==='day1'?'day1':id==='draw'?'draw/order':id;
   return '<a href="#'+href+'" '+(id===key?'aria-current="page"':'')+'>'+guideIcon(id)+'<span>'+encodeText(labels[id]||text)+'</span></a>';
  }
  const active=tabs.find(([id])=>id===key);
@@ -43,7 +43,7 @@ function flowAfterRender(key){
  }
 }
 function personRoute(name){
- const i=rosterPeople().findIndex(p=>p.name===name);
+ const i=rosterPeople().findIndex(p=>pullCanonical(p.name)===pullCanonical(name));
  return i<0?'':'roster/person/'+i;
 }
 const atlasRoutes={
@@ -75,7 +75,7 @@ function contextualChecklist(day,n){
 function searchGuide(query){
  const q=query.trim().toLowerCase();
  const row=(title,type,route,words='')=>({title,type,route,words});
- const days=[row('第 1 天 · 进服与首抽','清单','day1','首日抽卡资源'),...weekDays.map(d=>row('第 '+d.day+' 天 · '+d.title,'清单','week/'+d.day,d.focus))];
+ const days=[row('SS6 国服新区开荒 · 从教程到觉醒','攻略','day1','S19 SS6 新服 开荒 兵祸 多琪 奥洛拉'),row('第 1 天 · 进服与首抽','清单','day1','首日抽卡资源'),...weekDays.map(d=>row('第 '+d.day+' 天 · '+d.title,'清单','week/'+d.day,d.focus))];
  const people=rosterPeople().map((p,i)=>row(p.name,'角色','roster/person/'+i,[p.role,p.alias,...pullAliases(pullCanonical(p.name))].filter(Boolean).join(' ')));
  const scenes=allScenes().map((s,i)=>row(s.name,'阵容','roster/scene/'+i,s.goal));
  const notes=guideGroups.flatMap(([kind,label,get])=>get().map((v,i)=>row(v.title,label,'manual/'+kind+'/'+i)));

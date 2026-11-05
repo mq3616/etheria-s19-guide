@@ -146,6 +146,7 @@ window.addEventListener('hashchange',()=>{
  const previousY=history.state?.guideY;
  if(findDialog.open)findDialog.close();
  render();
+ if(!Number.isFinite(previousY)&&focusOpeningStage())return;
  if(!Number.isFinite(previousY)&&focusLinkedTeam())return;
  if(Number.isFinite(previousY))requestAnimationFrame(()=>window.scrollTo(0,previousY));
  else {const headingY=app.getBoundingClientRect().top+scrollY-nav.offsetHeight;if(scrollY>headingY)window.scrollTo(0,Math.max(0,headingY));}
@@ -156,3 +157,13 @@ document.querySelector('.return-top').addEventListener('click',()=>{document.que
 if(!location.hash && state.lastChecklist)history.replaceState(null,'','#'+checklistLocation());
 render();
 requestAnimationFrame(focusLinkedTeam);
+
+function focusOpeningStage(){
+ const match=/^#day1\/([0-3])$/.exec(location.hash);
+ if(!match)return false;
+ const section=document.getElementById('ss6-day1-'+match[1]);
+ if(section)requestAnimationFrame(()=>section.scrollIntoView({block:'start'}));
+ return Boolean(section);
+}
+
+if(!Number.isFinite(history.state?.guideY))focusOpeningStage();

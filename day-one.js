@@ -54,22 +54,24 @@ function planRows(day,tasks,offset=0){
   }).join('');
 }
 function dayOne(n){
-  const stage=openingPlan[n],tasks=openingPlan.flatMap(section=>section.tasks);
-  const offset=tasks.findIndex(([id])=>id===stage.tasks[0][0]);
-  const characterLinks=stage.people?checklistPeople(stage.people):'';
- const farmPhoto=n===2?inlineArt('maps',['hub'],'四种资源去哪里刷'):'';
-  return head('首周清单','DAY 01 / 11.05')+weekNav(1)+planMeter(1,tasks)+sub(openingPlan.map(x=>x.tab),n)+grid(
-    panel('','第 '+(n+1)+' 段 / 共 4 段',stage.title,(n===1?jump('draw/order','先看完整抽取顺序，再读本日步骤'):'')+contextualChecklist(1,n)+characterLinks+planRows(1,stage.tasks,offset)+(n<3?jump('day1/'+(n+1),'下一步 · '+openingPlan[n+1].tab):jump('week/2','接着做第 2 天'))),
-    panel('tint','零氪 PvE / 实战备忘',stage.hint,'<p>'+stage.note+'</p>'+farmPhoto+ref(stage.refs)+currentPlanEvidence())
-  );
+ const tasks=openingPlan.flatMap(section=>section.tasks);
+ const sections=openingPlan.map((stage,i)=>{
+   const checks=stage.tasks.map(task=>{
+     const key='day1-'+task[0];
+     return '<label class="opening-task"><input type="checkbox" data-plan-task="'+key+'" '+(state[key]?'checked':'')+'><span>'+encodeText(task[1])+'</span></label>';
+   }).join('');
+   return '<section id="ss6-day1-'+i+'"><h4>'+stage.tab+'</h4>'+checks+'</section>';
+ }).join('');
+ return head('SS6 国服新区开荒','S19 · 零氪 PvE')+ss6Walkthrough()+weekNav(1)+
+   '<section class="ss6-checklist"><h3>首日完成清单</h3>'+planMeter(1,tasks)+sections+jump('week/2','接着做第 2 天')+'</section>';
 }
 function weeklyChecklist(day){
   const plan=weekDays[day-2];
-  const giftGuide='<details><summary>今天刚领到赠送角色，换谁？</summary><p><b>克洛斯</b>接格雷的削弱位，优先调到主攻前出手。<br><b>凌罗</b>接多乐丝等治疗位，先接生存装。<br><b>瑞玛丽</b>在群怪关试换炼，按生命倍率另配装。<br><b>宁芙涅</b>在怕控制时顶替机动位，先保留治疗。</p><p>前两人来自培养计划，后两人来自 14 日系列任务。按实际领奖进度换人，尚未领取就继续用原队。</p></details>';
+  const giftGuide='<section><h4>刚领到赠送角色，换谁？</h4><p><b>克洛斯</b>接格雷的削弱位，优先调到主攻前出手。<br><b>凌罗</b>接多乐丝等治疗位，先接生存装。<br><b>瑞玛丽</b>在群怪关试换炼，按生命倍率另配装。<br><b>宁芙涅</b>在怕控制时顶替机动位，先保留治疗。</p><p>前两人来自培养计划，后两人来自 14 日系列任务。按实际领奖进度换人，尚未领取就继续用原队。</p></section>';
   const terms='<details><summary>萌新词典 · 拉条、破防、机动位</summary><p><b>拉条</b>让队友的行动提前。<b>破防</b>降低敌人防御，生效后再让主攻放大招。<b>机动位</b>是按关卡换人的位置，缺单体输出就放打手，怕控制就放保护。<b>源器</b>是角色装备，<b>主词条</b>是装备的主要属性。</p></details>';
   const pictureKey={2:'growth',3:'hub',4:'forge',5:'nana',6:'hub',7:'hub'}[day];
  const next=day<7?jump('week/'+(day+1),'接着做第 '+(day+1)+' 天'):jump('route/3','接着看第 8–14 天');
-  return head('首周清单','DAY 0'+day+' / '+plan.date)+weekNav(day)+planMeter(day,plan.tasks)+grid(
+  return head('首周清单','DAY 0'+day+' / '+plan.date)+weekNav(day)+jump('day1','读 SS6 新区开荒全文')+planMeter(day,plan.tasks)+grid(
     panel('','第 '+day+' 天　／　11 月 '+(day+4)+' 日',plan.title,'<p class="lead">'+plan.focus+'</p>'+contextualChecklist(day,0)+checklistPeople(plan.people)+planRows(day,plan.tasks)+next),
     panel('tint','零氪 PvE / 萌新备忘','今天记住这一点','<p>'+plan.tip+'</p>'+inlineArt('maps',[pictureKey],'对照游戏界面')+giftGuide+terms+jump('atlas/2','看副本入口实景')+ref(plan.refs)+currentPlanEvidence())
   );

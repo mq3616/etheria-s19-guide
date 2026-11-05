@@ -1,0 +1,10 @@
+.hero-skills{margin:18px 0;padding-top:12px;border-top:1px solid var(--line)}
+.hero-skills h4{font-size:1.12rem;margin:0 0 8px}.skill-focus{padding:8px 12px;border-left:3px solid var(--teal);background:var(--paper)}
+.hero-skill{margin:5px 0;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+.hero-skill>summary{cursor:pointer;min-height:44px;padding:9px 12px}.hero-skill>summary b,.skill-focus b,.skill-confirm b{color:var(--teal)}
+.hero-skill summary small{margin-left:.8em;color:var(--dim)}.hero-skill-body{padding:0 12px 10px}.hero-skill-body p,.skill-confirm{margin:.45em 0;white-space:pre-line}
+.skill-levels{width:100%;border-collapse:collapse;font-size:14px;color:var(--ink)}.skill-levels caption{text-align:left;color:var(--dim);padding-top:6px}
+.skill-levels th,.skill-levels td{border-top:1px solid var(--line);text-align:left;vertical-align:top;padding:6px}.skill-levels th{width:4em;white-space:nowrap}
+.skill-sources{margin:6px 0}.hero-skill>p{padding:0 12px}.hero-skill-body details{margin:5px 0}.hero-skills summary:focus-visible{outline:2px solid var(--teal)}
+.hero-skill h5{font-size:1rem;margin:0;padding:10px 12px 5px}.hero-skill h5 b{color:var(--teal)}.hero-skill h5 small{font-weight:normal;color:var(--dim)}.skill-levels caption{font-weight:650}.hero-skill .note{margin:6px 0}.skill-confirm b{font-size:.87em}
+.ss6-read,.ss6-checklist{margin:14px 0;padding:clamp(16px,2.5vw,28px);background:var(--light);border:1px solid var(--line);border-radius:8px}.ss6-read h3{margin:1.25em 0 .35em}.ss6-read p{max-width:82ch;line-height:1.75;margin:.5em 0}.ss6-read p.lead{font-size:1rem}.ss6-read a{color:var(--teal)}.ss6-boss dd{margin:3px 0 12px;line-height:1.7}.ss6-boss dt{font-weight:700}.ss6-checklist .opening-task{padding:6px 0}.ss6-checklist section{scroll-margin-top:64px}.ss6-checklist h4{margin:14px 0 6px}

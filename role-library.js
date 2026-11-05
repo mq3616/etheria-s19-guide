@@ -94,7 +94,7 @@ function roleLibrary(section,topic){
    const related=scenes.map((scene,i)=>(scene.verifiedTeam||[]).includes(item.name)?'<a href="#roster/scene/'+i+'">'+e(scene.name)+' →</a>':'').filter(Boolean).join('');
    const identity=item.name==='莎朗'?'<p class="note">这里是可培养的英雄莎朗；副本里的莎朗 Boss 请从场景页进入。</p>':'';
    const intro='<div class="person-intro">'+(portrait?makePlates([portrait],'portraits person-portrait'):'<div class="person-no-art">'+e(item.name)+'<small>角色图片待补充</small></div>')+'<div><div class="label">'+e(item.role)+'</div><h3>'+e(item.name)+'</h3>'+identity+('<p class="stripe">'+e(item.priority)+'</p>')+'</div></div>';
-   body+=panel('roster-person','角色 / 认人与用途','角色档案',intro+
+   body+=panel('roster-person','角色 / 认人与用途','角色档案',intro+heroSkillPanel(item.name)+
     '<section class="person-scenes"><h4>近期哪些场景点名用到</h4>'+(related?'<div class="libnav">'+related+'</div>':'<p class="note">当前收录的近期副本实录未点名此人。</p>')+'</section>'+
     (item.brief?'':step([['用在哪',e(item.scene)],['跟谁上场',e(item.team)],['先给什么资源',e(item.build)],['什么时候换人',e(item.limit)]]))+
     (item.availability?step([['S19 获取',e(item.availability)],['同位替换',e(item.replacement)]]):'')+
