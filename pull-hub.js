@@ -42,11 +42,14 @@ function remainingPairGroups(){
 }
 function pullOrderPage(){
  const groups=remainingPairGroups();
- return '<article class="pair-plan"><h3>下一张，等莉拉姆</h3>'+
+ return '<article class="pair-plan"><h3>逆翎靠抽，梨梨先查签到自选</h3>'+
+ '<p><b>还没拿到逆翎：</b>完成教程，进新手限时召唤查看逆翎目标、可用票和距必得的抽数。可以用免费获得的票和晶钻抽。资源不够就先用任务给的克洛斯推图。 <a href="https://www.taptap.cn/moment/866719390408642161?group_id=333480" target="_blank" rel="noopener">S19 公告 ↗</a></p>'+
+ '<p><b>还没拿到梨梨：</b>进活动页找「盛典之邀」，查看签到奖励「极相自选协议」。领取后打开协议，名单有梨梨就可以免费选她。9 月 SS6 新号记载是第 2 天，S19 的领取日和名单以本号显示为准。 <a href="https://www.taptap.cn/moment/729391537967859212" target="_blank" rel="noopener">签到规则 ↗</a> · <a href="https://www.taptap.cn/moment/845239663177240004" target="_blank" rel="noopener">9 月新号实录 ↗</a></p>'+
+ '<h3>两人都到手后，下一张等莉拉姆</h3>'+
  '<p>逆翎负责破防，梨梨能让主攻再出手。按你喜欢的爆发打法，先补一个打首领的单体主攻。莉拉姆在兵祸、奥洛拉等 8 个具体副本是 T0。</p>'+
  '<p class="pair-action"><strong>现在存极相原型和晶钻。</strong>等名单含莉拉姆的「极相·定向召唤」，或她自己的限定 UP。11 月 5 日还没查到下一期开池日期。能覆盖目标保底时拿首只就停。</p>'+
  '<p><b>手里已经有普通 SR 谛听？</b>先让梨梨拉他打兵祸、奥洛拉。如果能稳定过，把下一份定向留给<b>玄骊</b>，补持续输出和全队减冷却。若是队伍先倒，先练免费凌罗，仍站不住才把<b>艾莉尔</b>提前。</p><p>'+['逆翎','梨梨','莉拉姆'].map(skillProfileLink).join('　')+'</p></article>'+
- sbBudgetBox({showCalculator:true})+'<section class="pair-skip"><h3>这几个 T0 可以先跳过</h3><p><b>海因里希</b>只有兵祸一栏到 T0，已有逆翎能驱散。<b>莉露摩卡</b>只有多琪到 T0，先用任务瑞玛丽清场。<b>拂秋</b>只有莎朗本到 T0，等真卡在这关再考虑。</p><p>开服的夜离先让位给任务瑞玛丽；当前达罗斯池给承伤和复活，这份极相票继续留给输出。</p></section>'+
+ sbBudgetBox({showCalculator:true})+'<section class="pair-skip"><h3>这几个 T0 可以先跳过</h3><p><b>海因里希</b>只有兵祸一栏到 T0，拿到逆翎后可用她驱散。<b>莉露摩卡</b>只有多琪到 T0，先用任务瑞玛丽清场。<b>拂秋</b>只有莎朗本到 T0，等真卡在这关再考虑。</p><p>开服的夜离先让位给任务瑞玛丽；当前达罗斯池给承伤和复活，这份极相票继续留给输出。</p></section>'+
  '<details class="draw-detail" data-pair-priority><summary>查看剩余 '+groups.reduce((n,g)=>n+g.names.length,0)+' 个本体的抽取优先级</summary>'+groups.map(g=>'<section class="pair-band"><h4>'+encodeText(g.title)+'</h4><p>'+encodeText(g.reason)+'</p><div>'+g.names.map(catalogLink).join('　')+'</div></section>').join('')+'</details>'+
  '<details class="draw-detail"><summary>看排序依据和卡池日期</summary><p>这是按已有逆翎、梨梨的零氪账号做的取舍。10/20 玩家榜逐本评级，10/28 角色点评说明莉拉姆的单体用途。10/17 有梨梨配普通谛听的国服作业；暂无 S19 同装备换成莉拉姆的竞速对照。</p><p>玄骊在 11 栏里有 10 栏达到 T0 或 T0.5。葵诺丝在原表只有「高难」T0.5，但另一位作者看好她的长期输出，所以打黑渊时仍值得比较。9 月开过极相定向，11/4 更新确认当期极相限定为达罗斯。</p>'+pullLinks(['live','review','farm','sep','nov','s19'])+'</details>'+
  '<details class="draw-detail"><summary>查任务与全部 T0 / T0.5 角色</summary>'+summonBoard('order')+'</details>'+pullTabs('order');
@@ -85,7 +88,7 @@ function pullCatalogPage(){
 
 function pullHub(key){
  const title={order:'零氪 PvE：下一笔资源给谁',channels:'哪些角色能领、能选、能定向',catalog:'国服角色与抽取索引',basis:'抽卡建议用了哪些资料',ranks:'按副本查 PvE 节奏榜'}[key];
- if(key==='order')return head('已有逆翎和梨梨，接下来抽谁','零氪 PvE · 11/5 核对')+pullOrderPage();
+ if(key==='order')return head('新区先拿谁，再等哪个池','零氪 PvE · 11/5 核对')+pullOrderPage();
  return head(title,'S19 / 2026.11.05 核对')+pullTabs(key)+({order:pullOrderPage,channels:pullChannelPage,catalog:pullCatalogPage,basis:pullBasisPage,ranks:()=>summonBoard('ranks')}[key])();
 }
 document.addEventListener('input',e=>{if(e.target.id==='pull-find'){pullQ=e.target.value;pullPg=0;document.querySelector('#pull-list').innerHTML=pullCatalogRows()}});
